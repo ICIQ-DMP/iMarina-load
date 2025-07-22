@@ -8,13 +8,14 @@ from enum import Enum
 
 class Researcher:
 
-    def __init__(self, dni, email, name, surname, second_surname, orcid, end_date, sex, personal_web):
+    def __init__(self, dni, email, name, surname, second_surname, orcid, ini_date, end_date, sex, personal_web):
         self.dni = dni
         self.email = email
         self.name = name
         self.surname = surname
         self.second_surname = second_surname
         self.orcid = orcid
+        self.ini_date = ini_date
         self.end_date = end_date
         self.sex = sex
         self.personal_web = personal_web
@@ -29,6 +30,7 @@ class Researcher:
             f"  Second Surname: {self.second_surname}\n"
             f"  ORCID: {self.orcid}\n"
             f"  End Date: {self.end_date}\n"
+            f"  Ini Date: {self.ini_date}\n"
             f"  Sex: {self.sex}\n"
             f"  Personal web: {self.personal_web}\n"
         )
@@ -40,6 +42,7 @@ class Researcher:
                           self.surname,
                           self.second_surname,
                           self.orcid,
+                          self.ini_date,
                           self.end_date,
                           self.sex,
                           self.personal_web)
@@ -52,6 +55,7 @@ class A3_Field(Enum):
     SURNAME = 3
     SECOND_SURNAME = 4
     ORCID = 13
+    INI_DATE = 14
     END_DATE = 15
     SEX = 7
     PERSONAL_WEB = -1
@@ -64,9 +68,23 @@ class IMarina_Field(Enum):
     SURNAME = 2
     SECOND_SURNAME = 3
     ORCID = 35
+    INI_DATE = 18
     END_DATE = 19
-    SEX = 9
+    SEX = 8
     PERSONAL_WEB = 13
+
+
+def sanitize_date(date_dirty):
+    if isinstance(date_dirty, datetime.datetime):
+        return date_dirty
+    elif type(date_dirty) is pd._libs.tslibs.nattype.NaTType:
+        return None
+    elif isinstance(date_dirty, str):
+        return datetime.datetime.strptime(date_dirty.strip("'"), "%d/%m/%Y")
+    elif isinstance(date_dirty, float):
+        return None
+    else:
+        raise ValueError("Unknown type for date to sanitize")
 
 
 def parse_imarina_row_data(row):
@@ -74,7 +92,8 @@ def parse_imarina_row_data(row):
                       orcid=row.values[IMarina_Field.ORCID.value], name=row.values[IMarina_Field.NAME.value],
                       surname=row.values[IMarina_Field.SURNAME.value],
                       second_surname=row.values[IMarina_Field.SECOND_SURNAME.value],
-                      end_date=row.values[IMarina_Field.END_DATE.value],
+                      ini_date=sanitize_date(row.values[IMarina_Field.INI_DATE.value]),
+                      end_date=sanitize_date(row.values[IMarina_Field.END_DATE.value]),
                       sex=row.values[IMarina_Field.SEX.value],
                       personal_web=row.values[IMarina_Field.PERSONAL_WEB.value])
     return data
@@ -86,23 +105,24 @@ def parse_a3_row_data(row):
                       name=row.values[A3_Field.NAME.value],
                       surname=row.values[A3_Field.SURNAME.value],
                       second_surname=row.values[A3_Field.SECOND_SURNAME.value],
-                      end_date=row.values[A3_Field.END_DATE.value],
+                      ini_date=sanitize_date(row.values[A3_Field.INI_DATE.value]),
+                      end_date=sanitize_date(row.values[A3_Field.END_DATE.value]),
                       sex=row.values[A3_Field.SEX.value],
                       personal_web="https://iciq.es")
     return data
 
 
-def unparse_researcher_to_a3_row_data(data: Researcher, empty_output_row):
+def unparse_researcher_to_imarina_row(data: Researcher, empty_output_row):
     empty_output_row.iat[0, IMarina_Field.DNI.value] = data.dni
     empty_output_row.iat[0, IMarina_Field.EMAIL.value] = data.email
     empty_output_row.iat[0, IMarina_Field.ORCID.value] = data.orcid
     empty_output_row.iat[0, IMarina_Field.NAME.value] = data.name
     empty_output_row.iat[0, IMarina_Field.SURNAME.value] = data.surname
     empty_output_row.iat[0, IMarina_Field.SECOND_SURNAME.value] = data.second_surname
-    empty_output_row.iat[0, IMarina_Field.END_DATE.value] = data.end_date
+    empty_output_row.iat[0, IMarina_Field.INI_DATE.value] = data.ini_date.strftime("%d/%m/%Y")
+    empty_output_row.iat[0, IMarina_Field.END_DATE.value] = data.end_date.strftime("%d/%m/%Y")
     empty_output_row.iat[0, IMarina_Field.SEX.value] = data.sex
     empty_output_row.iat[0, IMarina_Field.PERSONAL_WEB.value] = data.personal_web
-
 
 
 def merge_a3_into_imarina(a3: Researcher, imarina: Researcher):
@@ -113,10 +133,9 @@ def merge_a3_into_imarina(a3: Researcher, imarina: Researcher):
     ret.name = a3.name
     ret.surname = a3.surname
     ret.second_surname = a3.second_surname
+    ret.ini_date = a3.ini_date
     ret.end_date = a3.end_date
-
     ret.sex = a3.sex
-
 
 
 def build_translations():
@@ -124,10 +143,6 @@ def build_translations():
     r[IMarina_Field.SEX] = {}
     r[IMarina_Field.SEX]["Mujer"] = "Woman"
     r[IMarina_Field.SEX]["Hombre"] = "Man"
-
-    
-
-
 
 
 def is_same_person(imarina_row, a3_row):
@@ -207,6 +222,7 @@ def main():
 
             #print("found these matching rows: " + msg)
             #input()
+
             # Check if its position has changed. If it has, add current imarina row to output with end date to the
             # corresponding field. Add a new line with same data with the new position and dates to determine to output.
             # If it has not changed, add current imarina row to output as is.
@@ -218,10 +234,10 @@ def main():
             not_present += 1
 
             # Use end time already in iMarina if present, if not set to today
-            researcher_imarina.end_date = today.strftime("%d/%m/%Y")
+            researcher_imarina.end_date = today
 
             empty_row = empty_row_output_data.copy()
-            unparse_researcher_to_a3_row_data(researcher_imarina, empty_row)
+            unparse_researcher_to_imarina_row(researcher_imarina, empty_row)
             #print("unparsed row: " + str(empty_row))
 
             #print("empty row cols " + str(empty_row.columns))
@@ -229,7 +245,7 @@ def main():
             output_data = pd.concat([output_data, empty_row], ignore_index=True)
 
             #print("output data " + str(output_data))
-            input()
+            #input()
 
             # not in a3, but present in last iMarina load
             # Add current iMarina row to output with the end date with the corresponding value and field to notify end
