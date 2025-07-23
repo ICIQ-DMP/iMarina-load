@@ -1,14 +1,18 @@
 import datetime
+import logging
 
 import pandas as pd
 from datetime import date
 import os
 from enum import Enum
 
+from log import setup_logger
+
 
 class Researcher:
 
-    def __init__(self, dni, email, name, surname, second_surname, orcid, ini_date, end_date, sex, personal_web):
+    def __init__(self, dni, email, name, surname, second_surname, orcid, ini_date, end_date, sex, personal_web,
+                 signature, signature_custom):
         self.dni = dni
         self.email = email
         self.name = name
@@ -19,6 +23,8 @@ class Researcher:
         self.end_date = end_date
         self.sex = sex
         self.personal_web = personal_web
+        self.signature = signature
+        self.signature_custom = signature_custom
 
     def __str__(self):
         return (
@@ -33,6 +39,8 @@ class Researcher:
             f"  Ini Date: {self.ini_date}\n"
             f"  Sex: {self.sex}\n"
             f"  Personal web: {self.personal_web}\n"
+            f"  Signature: {self.signature}\n"
+            f"  Signature custom: {self.signature_custom}\n"
         )
 
     def copy(self):
@@ -45,37 +53,51 @@ class Researcher:
                           self.ini_date,
                           self.end_date,
                           self.sex,
-                          self.personal_web)
+                          self.personal_web,
+                          self.signature,
+                          self.signature_custom)
 
 
 class A3_Field(Enum):
-    DNI = 5
-    EMAIL = 9
     NAME = 2
     SURNAME = 3
     SECOND_SURNAME = 4
+    DNI = 5
+    SEX = 6
+    EMAIL = 9
     ORCID = 13
     INI_DATE = 14
     END_DATE = 15
-    SEX = 7
     PERSONAL_WEB = -1
+    SIGNATURE = -1
+    SIGNATURE_CUSTOM = -1
 
 
 class IMarina_Field(Enum):
-    DNI = 6
-    EMAIL = 12
-    NAME = 1
-    SURNAME = 2
-    SECOND_SURNAME = 3
-    ORCID = 35
-    INI_DATE = 18
-    END_DATE = 19
-    SEX = 8
-    PERSONAL_WEB = 13
+    NAME = 1  # Submit
+    SURNAME = 2  # Submit
+    SECOND_SURNAME = 3  # Submit
+    SIGNATURE = 4  # No submit. Why?
+    SIGNATURE_CUSTOM = 5  # No submit. Why?
+    DNI = 6  # Submit
+    SEX = 8  # Submit
+    #COUNTRY = 9   # Submit
+    EMAIL = 12  # Submit
+    PERSONAL_WEB = 13  # Submit
+    #ADSCRIPTION_TYPE = 15  # Submit
+    #CATEGORY = 16  # Submit
+    INI_DATE = 18  # Submit
+    END_DATE = 19  # Submit
+    #ENTITY = 20  # Submit
+    #ENTITY_TYPE = 22  # Submit
+    #ENTITY_WEB = 29  # Submit
+    ORCID = 35  # Submit
 
 
 def sanitize_date(date_dirty):
-    if isinstance(date_dirty, datetime.datetime):
+    if type(date_dirty) is pd._libs.tslibs.timestamps.Timestamp:
+        return date_dirty
+    elif type(date_dirty) is datetime.datetime:
         return date_dirty
     elif type(date_dirty) is pd._libs.tslibs.nattype.NaTType:
         return None
@@ -84,7 +106,7 @@ def sanitize_date(date_dirty):
     elif isinstance(date_dirty, float):
         return None
     else:
-        raise ValueError("Unknown type for date to sanitize")
+        raise ValueError("Unknown type for date to sanitize: " + str(type(date_dirty)) + " value is: " + str(date_dirty))
 
 
 def parse_imarina_row_data(row):
@@ -95,11 +117,14 @@ def parse_imarina_row_data(row):
                       ini_date=sanitize_date(row.values[IMarina_Field.INI_DATE.value]),
                       end_date=sanitize_date(row.values[IMarina_Field.END_DATE.value]),
                       sex=row.values[IMarina_Field.SEX.value],
-                      personal_web=row.values[IMarina_Field.PERSONAL_WEB.value])
+                      personal_web=row.values[IMarina_Field.PERSONAL_WEB.value],
+                      signature=row.values[IMarina_Field.SIGNATURE.value],
+                      signature_custom=row.values[IMarina_Field.SIGNATURE_CUSTOM.value])
     return data
 
 
 def parse_a3_row_data(row):
+    translator = build_translations()
     data = Researcher(dni=row.values[A3_Field.DNI.value], email=row.values[A3_Field.EMAIL.value],
                       orcid=row.values[A3_Field.ORCID.value],
                       name=row.values[A3_Field.NAME.value],
@@ -107,9 +132,18 @@ def parse_a3_row_data(row):
                       second_surname=row.values[A3_Field.SECOND_SURNAME.value],
                       ini_date=sanitize_date(row.values[A3_Field.INI_DATE.value]),
                       end_date=sanitize_date(row.values[A3_Field.END_DATE.value]),
-                      sex=row.values[A3_Field.SEX.value],
-                      personal_web="https://iciq.es")
+                      sex=translator[A3_Field.SEX][row.values[A3_Field.SEX.value]],
+                      personal_web="",
+                      signature="",
+                      signature_custom="")
     return data
+
+
+def unparse_date(date):
+    if date is None:
+        return ""
+    else:
+        return date.strftime("%d/%m/%Y")
 
 
 def unparse_researcher_to_imarina_row(data: Researcher, empty_output_row):
@@ -119,10 +153,12 @@ def unparse_researcher_to_imarina_row(data: Researcher, empty_output_row):
     empty_output_row.iat[0, IMarina_Field.NAME.value] = data.name
     empty_output_row.iat[0, IMarina_Field.SURNAME.value] = data.surname
     empty_output_row.iat[0, IMarina_Field.SECOND_SURNAME.value] = data.second_surname
-    empty_output_row.iat[0, IMarina_Field.INI_DATE.value] = data.ini_date.strftime("%d/%m/%Y")
-    empty_output_row.iat[0, IMarina_Field.END_DATE.value] = data.end_date.strftime("%d/%m/%Y")
+    empty_output_row.iat[0, IMarina_Field.INI_DATE.value] = unparse_date(data.ini_date)
+    empty_output_row.iat[0, IMarina_Field.END_DATE.value] = unparse_date(data.end_date)
     empty_output_row.iat[0, IMarina_Field.SEX.value] = data.sex
     empty_output_row.iat[0, IMarina_Field.PERSONAL_WEB.value] = data.personal_web
+    empty_output_row.iat[0, IMarina_Field.SIGNATURE.value] = data.signature
+    empty_output_row.iat[0, IMarina_Field.SIGNATURE_CUSTOM.value] = data.signature_custom
 
 
 def merge_a3_into_imarina(a3: Researcher, imarina: Researcher):
@@ -136,25 +172,55 @@ def merge_a3_into_imarina(a3: Researcher, imarina: Researcher):
     ret.ini_date = a3.ini_date
     ret.end_date = a3.end_date
     ret.sex = a3.sex
+    ret.personal_web = a3.personal_web
+    ret.signature = a3.signature
+    ret.signature_custom = a3.signature_custom
+
+
+def parse_two_columns(df, key: int, value: int, func_apply_key=None, func_apply_value=None):
+    # Column C = index 2 (DNI), Column D = index 3 (NAF)
+    val_col = df[value]
+    key_col = df[key]
+
+    if func_apply_value is not None:
+        val_col = val_col.apply(func_apply_value)
+    if func_apply_key is not None:
+        key_col = key_col.apply(func_apply_key)
+
+    return dict(zip(key_col, val_col))
+
+
+def read_dataframe(path, skiprows, header):
+    # Read the Excel file, skipping the first 3 rows
+    return pd.read_excel(path, skiprows=skiprows, header=header)
+
+
+def build_naf_to_dni(path):
+    df = read_dataframe(path, 3, None)
+    return parse_two_columns(df, 3, 2)
+
+
+def apply_defaults(researcher: Researcher):
+    researcher.personal_web = "https://iciq.es"
 
 
 def build_translations():
-    r = {}
-    r[IMarina_Field.SEX] = {}
-    r[IMarina_Field.SEX]["Mujer"] = "Woman"
-    r[IMarina_Field.SEX]["Hombre"] = "Man"
+    r = {A3_Field.SEX: {}}
+    r[A3_Field.SEX]["Mujer"] = "Woman"
+    r[A3_Field.SEX]["Hombre"] = "Man"
+    return r
 
 
 def is_same_person(imarina_row, a3_row):
     if isinstance(imarina_row.orcid, str) and isinstance(a3_row.orcid, str):
         if imarina_row.orcid.replace("-", "") == a3_row.orcid:
-            print("ORCID match")
+            #print("ORCID match")
             return True
     if imarina_row.dni == a3_row.dni:
-        print("DNI match")
+        #print("DNI match")
         return True
     if imarina_row.email == a3_row.email:
-        print("email match: iMarina email: " + str(imarina_row.email) + " a3 match: " + str(a3_row.email))
+        #print("email match: iMarina email: " + str(imarina_row.email) + " search_data match: " + str(a3_row.email))
         return True
     return False
 
@@ -167,17 +233,13 @@ def is_in_a3(search_data, a3):
     return False
 
 
-def search_a3_data(search_data, a3):
+def search_data(query, search_data, parser):
     matches = []
-    for index, row in a3.iterrows():
-        row_data = parse_a3_row_data(row)
-        if is_same_person(search_data, row_data):
+    for index, row in search_data.iterrows():
+        row_data = parser(row)
+        if is_same_person(query, row_data):
             matches.append(row_data)
-
-    if len(matches) == 0:
-        raise ValueError("Data from " + str(search_data.email) + " is not present in A3 data.")
-    else:
-        return matches
+    return matches
 
 
 def build_empty_row(imarina_dataframe):
@@ -187,13 +249,15 @@ def build_empty_row(imarina_dataframe):
 
 
 def main():
+    logger = setup_logger("iMarina-load", "./logs/log.log", level=logging.DEBUG)
+
     today = date.today()
 
     # Repo root
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     # Output dir
-    output_path = os.path.join(root_dir, 'output', "iMarina_upload_" + date.today().__str__() + ".xlsx")
+    output_path = os.path.join(root_dir, 'output', "iMarina_upload_" + datetime.datetime.today().__str__() + ".xlsx")
     input_dir = os.path.join(root_dir, 'input')
 
     # Get A3 data
@@ -214,45 +278,57 @@ def main():
         print("Processing data from: " + row.values[1] + " " + row.values[2])
 
         researcher_imarina = parse_imarina_row_data(row)
-        try:
-            researchers_matched_a3 = search_a3_data(researcher_imarina, a3_data)
-            msg = ""
-            for row_i in researchers_matched_a3:
-                msg += str(row_i)
-
-            #print("found these matching rows: " + msg)
-            #input()
-
-            # Check if its position has changed. If it has, add current imarina row to output with end date to the
-            # corresponding field. Add a new line with same data with the new position and dates to determine to output.
-            # If it has not changed, add current imarina row to output as is.
-        except ValueError as e:  # TODO change custom except
+        researchers_matched_a3 = search_data(researcher_imarina, a3_data, parse_a3_row_data)
+        empty_row = empty_row_output_data.copy()
+        if len(researchers_matched_a3) == 0:
+            # The current researcher in last iMarina load is not present in A3 --> the researcher is no longer in ICIQ.
             print(
-                "row data from " + str(researcher_imarina.name) + " is not present on a3 data. Adding to iMarina with "
-                                                                  "end of "
-                                                                  "contract date. " + str(e))
+                "row data from " + str(
+                    researcher_imarina.name) + " is not present on search_data data. Adding to iMarina with "
+                                               "end of "
+                                               "contract date.")
             not_present += 1
 
-            # Use end time already in iMarina if present, if not set to today
-            researcher_imarina.end_date = today
+            # Use end time already in iMarina if present, if not, set to today
+            if researcher_imarina.end_date is None:
+                researcher_imarina.end_date = today
 
-            empty_row = empty_row_output_data.copy()
             unparse_researcher_to_imarina_row(researcher_imarina, empty_row)
-            #print("unparsed row: " + str(empty_row))
-
-            #print("empty row cols " + str(empty_row.columns))
-            #print("output row cols " + str(output_data.columns))
             output_data = pd.concat([output_data, empty_row], ignore_index=True)
-
-            #print("output data " + str(output_data))
-            #input()
-
-            # not in a3, but present in last iMarina load
-            # Add current iMarina row to output with the end date with the corresponding value and field to notify end
-            # of contract
-            # Convertir en DataFrame de una sola fila y añadir al output
+        elif len(researchers_matched_a3) == 1:
+            # The current researcher in iMarina is present in A3 --> Corresponds to a researcher still working in ICIQ
+            if researcher_imarina.end_date is None:  # iMarina row has end date?
+                # how to check position change.
+                # If end date not present check if a position change
+                # Add a new line
+                # with same data with the new position and dates to determine to output.
+                # If it has not changed, add current iMarina row to output as is.
+                # (end date not present) it is a contract that could be still ongoing
+                continue
+            # Contract has end date and is already present in ICIQ; it is a history line, so append to output as is
+            unparse_researcher_to_imarina_row(researcher_imarina, empty_row)
+            output_data = pd.concat([output_data, empty_row], ignore_index=True)
+        else:
+            raise ValueError("More than one value matched in A3 for researcher " + str(researcher_imarina.name))
 
     # Phase 2: Add researchers in A3 that are not present in iMarina
+    for index, row in a3_data.iterrows():
+        researcher_a3 = parse_a3_row_data(row)
+        researchers_matched_im = search_data(researcher_a3, im_data, parse_imarina_row_data)
+        empty_row = empty_row_output_data.copy()
+        if len(researchers_matched_im) == 0:
+            logger.info(f"Present in A3 but not on iMarina, is a new researcher to add to iMarina")
+            unparse_researcher_to_imarina_row(researcher_a3, empty_row)
+            output_data = pd.concat([output_data, empty_row], ignore_index=True)
+        elif len(researchers_matched_im) == 1:
+            logger.info(f"Present in A3 and also on iMarina, we do not need to do anything because we added it on the "
+                        f"previous step")
+            pass
+        elif len(researchers_matched_im) > 1:
+            logger.info(f"Present in A3 and also on iMarina, we do not need to do anything because we added it on the "
+                        f"previous step. More than one match. Number: {str(len(researchers_matched_im))}")
+
+
     # For each researcher in A3, check if they are not present in iMarina
     # If they are not present, it has a code 4 and its begin and end date is outside a range
     # to determine from fields to determine, then the current row from A3 corresponds to ICREA researcher or predoc
