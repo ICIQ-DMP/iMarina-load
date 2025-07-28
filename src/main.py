@@ -12,7 +12,7 @@ from log import setup_logger
 class Researcher:
 
     def __init__(self, dni, email, name, surname, second_surname, orcid, ini_date, end_date, sex, personal_web,
-                 signature, signature_custom):
+                 signature, signature_custom, country):
         self.dni = dni
         self.email = email
         self.name = name
@@ -25,6 +25,7 @@ class Researcher:
         self.personal_web = personal_web
         self.signature = signature
         self.signature_custom = signature_custom
+        self.country = country
 
     def __str__(self):
         return (
@@ -41,6 +42,7 @@ class Researcher:
             f"  Personal web: {self.personal_web}\n"
             f"  Signature: {self.signature}\n"
             f"  Signature custom: {self.signature_custom}\n"
+            f"  Country: {self.country}\n"
         )
 
     def copy(self):
@@ -55,7 +57,8 @@ class Researcher:
                           self.sex,
                           self.personal_web,
                           self.signature,
-                          self.signature_custom)
+                          self.signature_custom,
+                          self.country)
 
 
 class A3_Field(Enum):
@@ -64,6 +67,7 @@ class A3_Field(Enum):
     SECOND_SURNAME = 4
     DNI = 5
     SEX = 6
+    COUNTRY = 7
     EMAIL = 9
     ORCID = 13
     INI_DATE = 14
@@ -81,7 +85,7 @@ class IMarina_Field(Enum):
     SIGNATURE_CUSTOM = 5  # No submit. Why?
     DNI = 6  # Submit
     SEX = 8  # Submit
-    #COUNTRY = 9   # Submit
+    COUNTRY = 9   # Submit
     EMAIL = 12  # Submit
     PERSONAL_WEB = 13  # Submit
     #ADSCRIPTION_TYPE = 15  # Submit
@@ -119,7 +123,8 @@ def parse_imarina_row_data(row):
                       sex=row.values[IMarina_Field.SEX.value],
                       personal_web=row.values[IMarina_Field.PERSONAL_WEB.value],
                       signature=row.values[IMarina_Field.SIGNATURE.value],
-                      signature_custom=row.values[IMarina_Field.SIGNATURE_CUSTOM.value])
+                      signature_custom=row.values[IMarina_Field.SIGNATURE_CUSTOM.value],
+                      country=row.values[IMarina_Field.COUNTRY.value])
     return data
 
 
@@ -135,7 +140,8 @@ def parse_a3_row_data(row):
                       sex=translator[A3_Field.SEX][row.values[A3_Field.SEX.value]],
                       personal_web="",
                       signature="",
-                      signature_custom="")
+                      signature_custom="",
+                      country=translator[A3_Field.COUNTRY][row.values[A3_Field.COUNTRY.value]])
     return data
 
 
@@ -178,7 +184,6 @@ def merge_a3_into_imarina(a3: Researcher, imarina: Researcher):
 
 
 def parse_two_columns(df, key: int, value: int, func_apply_key=None, func_apply_value=None):
-    # Column C = index 2 (DNI), Column D = index 3 (NAF)
     val_col = df[value]
     key_col = df[key]
 
@@ -195,19 +200,24 @@ def read_dataframe(path, skiprows, header):
     return pd.read_excel(path, skiprows=skiprows, header=header)
 
 
-def build_naf_to_dni(path):
-    df = read_dataframe(path, 3, None)
-    return parse_two_columns(df, 3, 2)
+def build_countries_translator(path):
+    df = read_dataframe(path, 0, None)
+    return parse_two_columns(df, 0, 1)
 
 
 def apply_defaults(researcher: Researcher):
     researcher.personal_web = "https://iciq.es"
 
 
-def build_translations():
+def build_translations(countries_path):
     r = {A3_Field.SEX: {}}
     r[A3_Field.SEX]["Mujer"] = "Woman"
     r[A3_Field.SEX]["Hombre"] = "Man"
+
+    countries = build_countries_translator(countries_path)
+    for key in countries.keys():
+        countries[A3_Field.]
+
     return r
 
 
@@ -268,6 +278,8 @@ def main():
     # Get iMarina last upload data
     im_path = os.path.join(input_dir, "iMarina.xlsx")
     im_data = pd.read_excel(im_path, header=0)
+
+    countries_path = os.path.join(input_dir, "countries.xlsx")
 
     output_data = im_data[0:0]  # retains columns, types, and headers if any
     empty_row_output_data = build_empty_row(imarina_dataframe=im_data)
