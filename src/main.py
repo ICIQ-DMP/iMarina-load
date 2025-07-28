@@ -347,6 +347,9 @@ def main():
     # with CSC, so its data from A3 needs to be added to the output.
     output_data.to_excel(output_path, index=False)
 
+    # Si grupo  unidad = DIRECCIO, o grupo unidad = GESTIO, o grupo unidad = OUTREACH llavors eliminar del output ( no poner)
+
+
 
 if __name__ == "__main__":
     main()
