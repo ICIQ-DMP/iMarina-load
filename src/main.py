@@ -1,12 +1,17 @@
 import datetime
 import logging
+import shutil
 
 import pandas as pd
 from datetime import date
 import os
 from enum import Enum
 
+import paramiko
+
 from log import setup_logger
+from arguments import process_parse_arguments
+from secret import read_secret
 
 
 class Researcher:
@@ -216,7 +221,7 @@ def build_translations(countries_path):
 
     countries = build_countries_translator(countries_path)
     for key in countries.keys():
-        countries[A3_Field.]
+        countries[A3_Field.COUNTRY][key] = countries[key]
 
     return r
 
@@ -258,17 +263,45 @@ def build_empty_row(imarina_dataframe):
     return empty_output_dataframe
 
 
-def main():
-    logger = setup_logger("iMarina-load", "./logs/log.log", level=logging.DEBUG)
+def upload_excel(excel_path):
+    logger = setup_logger("Upload", "./logs/log.log", level=logging.DEBUG)
+
+    logger.info('Connecting to FTP server.')
+    ftp = None
+    try:
+        serv = paramiko.Transport((read_secret("FTP_HOST"), int(read_secret("FTP_PORT"))))
+        serv.connect(username=read_secret("FTP_USER"), password=read_secret("FTP_PASSWORD"))
+        ftp = paramiko.SFTPClient.from_transport(serv)
+    except Exception as e:
+        logger.exception(e)
+    logger.info('Connected to FTP server.')
+
+    #logger.info('Changing directory.')
+    #try:
+    #    ftp.chdir('carga_personal')
+    #except Exception as e:
+    #    logger.exception(e)
+    #logger.info('Changed directory.')
+
+    logger.info('Uploading file.')
+    try:
+        ftp.put(excel_path, 'icl_ag_personal_12539')
+    except Exception as e:
+        logger.exception(e)
+    logger.info('Uploaded file.')
+
+    logger.info('Closing connection.')
+    try:
+        ftp.close()
+    except Exception as e:
+        logger.exception(e)
+    logger.info('Closed connection.')
+
+
+def build_upload_excel(input_dir, output_path):
+    logger = setup_logger("Excel build", "./logs/log.log", level=logging.DEBUG)
 
     today = date.today()
-
-    # Repo root
-    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-    # Output dir
-    output_path = os.path.join(root_dir, 'output', "iMarina_upload_" + datetime.datetime.today().__str__() + ".xlsx")
-    input_dir = os.path.join(root_dir, 'input')
 
     # Get A3 data
     a3_path = os.path.join(input_dir, "A3.xlsx")
@@ -341,14 +374,34 @@ def main():
                         f"previous step. More than one match. Number: {str(len(researchers_matched_im))}")
 
 
+    # Si grupo  unidad = DIRECCIO, o grupo unidad = GESTIO, o grupo unidad = OUTREACH llavors eliminar del output ( no poner)
+
     # For each researcher in A3, check if they are not present in iMarina
-    # If they are not present, it has a code 4 and its begin and end date is outside a range
+    # If they are not present, it has a code 4, it begins and end date is outside a range
     # to determine from fields to determine, then the current row from A3 corresponds to ICREA researcher or predoc
     # with CSC, so its data from A3 needs to be added to the output.
     output_data.to_excel(output_path, index=False)
 
-    # Si grupo  unidad = DIRECCIO, o grupo unidad = GESTIO, o grupo unidad = OUTREACH llavors eliminar del output ( no poner)
 
+def main():
+    logger = setup_logger("Main process", "./logs/log.log", level=logging.DEBUG)
+    args = process_parse_arguments()
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    excel_name = "iMarina_upload_" + datetime.datetime.today().__str__() + ".xlsx"
+    output_path = os.path.join(root_dir, 'output', excel_name)
+    input_dir = os.path.join(root_dir, 'input')
+
+    if args.step == "build" or args.step == "all":
+        build_upload_excel(input_dir, output_path)
+    if args.step == "upload" or args.step == "all":
+        if args.upload:
+            upload_excel(args.upload)
+        else:
+            upload_excel(output_path)
+
+    # Phase 3: Upload file to iMarina and make backup
+    shutil.move(output_path, os.path.join(root_dir, "uploads", excel_name))
 
 
 if __name__ == "__main__":
