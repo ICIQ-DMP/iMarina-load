@@ -16,4 +16,5 @@ sudo apt install python3.12-venv gcc build-essential -y
 ```shell
 cd iMarina
 python3 -m venv venv
+./venv/bin/pip install -r requirements.txt 
 ```
