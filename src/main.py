@@ -17,7 +17,7 @@ from secret import read_secret
 class Researcher:
 
     def __init__(self, dni, email, name, surname, second_surname, orcid, ini_date, end_date, sex, personal_web,
-                 signature, signature_custom, country):
+                 signature, signature_custom, country, born_country, job_description):
         self.dni = dni
         self.email = email
         self.name = name
@@ -31,6 +31,8 @@ class Researcher:
         self.signature = signature
         self.signature_custom = signature_custom
         self.country = country
+        self.born_country = born_country
+        self.job_description = job_description
 
     def __str__(self):
         return (
@@ -48,6 +50,8 @@ class Researcher:
             f"  Signature: {self.signature}\n"
             f"  Signature custom: {self.signature_custom}\n"
             f"  Country: {self.country}\n"
+            f"  Born country: {self.born_country}\n"
+            f"  Job description: {self.job_description}\n"
         )
 
     def copy(self):
@@ -63,7 +67,9 @@ class Researcher:
                           self.personal_web,
                           self.signature,
                           self.signature_custom,
-                          self.country)
+                          self.country,
+                          self.born_country,
+                          self.job_description)
 
 
 class A3_Field(Enum):
@@ -73,13 +79,17 @@ class A3_Field(Enum):
     DNI = 5
     SEX = 6
     COUNTRY = 7
+    BORN_COUNTRY = 8
     EMAIL = 9
+    JOB_DESCRIPTION = 10
     ORCID = 13
     INI_DATE = 14
     END_DATE = 15
     PERSONAL_WEB = -1
     SIGNATURE = -1
     SIGNATURE_CUSTOM = -1
+    BIRTH_DATE = -1
+
 
 
 class IMarina_Field(Enum):
@@ -89,12 +99,14 @@ class IMarina_Field(Enum):
     SIGNATURE = 4  # No submit. Why?
     SIGNATURE_CUSTOM = 5  # No submit. Why?
     DNI = 6  # Submit
+    BIRTH_DATE = 7  # Submit
     SEX = 8  # Submit
     COUNTRY = 9   # Submit
+    #BORN_COUNTRY = -1
     EMAIL = 12  # Submit
     PERSONAL_WEB = 13  # Submit
     #ADSCRIPTION_TYPE = 15  # Submit
-    #CATEGORY = 16  # Submit
+    JOB_DESCRIPTION = 16  # Submit
     INI_DATE = 18  # Submit
     END_DATE = 19  # Submit
     #ENTITY = 20  # Submit
@@ -118,7 +130,7 @@ def sanitize_date(date_dirty):
         raise ValueError("Unknown type for date to sanitize: " + str(type(date_dirty)) + " value is: " + str(date_dirty))
 
 
-def parse_imarina_row_data(row):
+def parse_imarina_row_data(row, translator):
     data = Researcher(dni=row.values[IMarina_Field.DNI.value], email=row.values[IMarina_Field.EMAIL.value],
                       orcid=row.values[IMarina_Field.ORCID.value], name=row.values[IMarina_Field.NAME.value],
                       surname=row.values[IMarina_Field.SURNAME.value],
@@ -129,12 +141,13 @@ def parse_imarina_row_data(row):
                       personal_web=row.values[IMarina_Field.PERSONAL_WEB.value],
                       signature=row.values[IMarina_Field.SIGNATURE.value],
                       signature_custom=row.values[IMarina_Field.SIGNATURE_CUSTOM.value],
-                      country=row.values[IMarina_Field.COUNTRY.value])
+                      country=row.values[IMarina_Field.COUNTRY.value],
+                      born_country=row.values[IMarina_Field.COUNTRY.value],
+                      job_description=row.values[IMarina_Field.JOB_DESCRIPTION.value]                      )
     return data
 
 
-def parse_a3_row_data(row):
-    translator = build_translations()
+def parse_a3_row_data(row, translator):
     data = Researcher(dni=row.values[A3_Field.DNI.value], email=row.values[A3_Field.EMAIL.value],
                       orcid=row.values[A3_Field.ORCID.value],
                       name=row.values[A3_Field.NAME.value],
@@ -142,11 +155,14 @@ def parse_a3_row_data(row):
                       second_surname=row.values[A3_Field.SECOND_SURNAME.value],
                       ini_date=sanitize_date(row.values[A3_Field.INI_DATE.value]),
                       end_date=sanitize_date(row.values[A3_Field.END_DATE.value]),
-                      sex=translator[A3_Field.SEX][row.values[A3_Field.SEX.value]],
+                      sex=row.values[A3_Field.SEX.value],
                       personal_web="",
                       signature="",
                       signature_custom="",
-                      country=translator[A3_Field.COUNTRY][row.values[A3_Field.COUNTRY.value]])
+                      country=row.values[A3_Field.COUNTRY.value],
+                      born_country=row.values[A3_Field.BORN_COUNTRY.value],
+                      job_description= translator[A3_Field.JOB_DESCRIPTION][row.values[A3_Field.JOB_DESCRIPTION.value]]     # TODO
+                      )
     return data
 
 
@@ -170,6 +186,9 @@ def unparse_researcher_to_imarina_row(data: Researcher, empty_output_row):
     empty_output_row.iat[0, IMarina_Field.PERSONAL_WEB.value] = data.personal_web
     empty_output_row.iat[0, IMarina_Field.SIGNATURE.value] = data.signature
     empty_output_row.iat[0, IMarina_Field.SIGNATURE_CUSTOM.value] = data.signature_custom
+    empty_output_row.iat[0, IMarina_Field.JOB_DESCRIPTION.value] = data.job_description
+
+    # Born country not available in iMarina
 
 
 def merge_a3_into_imarina(a3: Researcher, imarina: Researcher):
@@ -210,18 +229,29 @@ def build_countries_translator(path):
     return parse_two_columns(df, 0, 1)
 
 
+def build_jobs_translator(path):
+    df = read_dataframe(path, 0, None)
+    return parse_two_columns(df, 0, 1)
+
+
 def apply_defaults(researcher: Researcher):
     researcher.personal_web = "https://iciq.es"
 
 
-def build_translations(countries_path):
+def build_translations(countries_path, jobs_path):
     r = {A3_Field.SEX: {}}
     r[A3_Field.SEX]["Mujer"] = "Woman"
     r[A3_Field.SEX]["Hombre"] = "Man"
 
+    r[A3_Field.COUNTRY] = {}
     countries = build_countries_translator(countries_path)
     for key in countries.keys():
-        countries[A3_Field.COUNTRY][key] = countries[key]
+        r[A3_Field.COUNTRY][key] = countries[key]
+
+    r[A3_Field.JOB_DESCRIPTION] = {}
+    jobs = build_jobs_translator(jobs_path)
+    for key in jobs.keys():
+        r[A3_Field.JOB_DESCRIPTION][key] = jobs[key]
 
     return r
 
@@ -248,10 +278,10 @@ def is_in_a3(search_data, a3):
     return False
 
 
-def search_data(query, search_data, parser):
+def search_data(query, search_data, parser, translator):
     matches = []
     for index, row in search_data.iterrows():
-        row_data = parser(row)
+        row_data = parser(row, translator)
         if is_same_person(query, row_data):
             matches.append(row_data)
     return matches
@@ -313,17 +343,20 @@ def build_upload_excel(input_dir, output_path):
     im_data = pd.read_excel(im_path, header=0)
 
     countries_path = os.path.join(input_dir, "countries.xlsx")
+    jobs_path = os.path.join(input_dir, "Job_Descriptions.xlsx")
 
     output_data = im_data[0:0]  # retains columns, types, and headers if any
     empty_row_output_data = build_empty_row(imarina_dataframe=im_data)
+
+    translator = build_translations(countries_path, jobs_path)
 
     # Phase 1: Check if the researchers in iMarina are still in A3
     not_present = 0
     for index, row in im_data.iterrows():
         print("Processing data from: " + row.values[1] + " " + row.values[2])
 
-        researcher_imarina = parse_imarina_row_data(row)
-        researchers_matched_a3 = search_data(researcher_imarina, a3_data, parse_a3_row_data)
+        researcher_imarina = parse_imarina_row_data(row, translator)
+        researchers_matched_a3 = search_data(researcher_imarina, a3_data, parse_a3_row_data, translator)
         empty_row = empty_row_output_data.copy()
         if len(researchers_matched_a3) == 0:
             # The current researcher in last iMarina load is not present in A3 --> the researcher is no longer in ICIQ.
@@ -358,8 +391,8 @@ def build_upload_excel(input_dir, output_path):
 
     # Phase 2: Add researchers in A3 that are not present in iMarina
     for index, row in a3_data.iterrows():
-        researcher_a3 = parse_a3_row_data(row)
-        researchers_matched_im = search_data(researcher_a3, im_data, parse_imarina_row_data)
+        researcher_a3 = parse_a3_row_data(row, translator)
+        researchers_matched_im = search_data(researcher_a3, im_data, parse_imarina_row_data, translator)
         empty_row = empty_row_output_data.copy()
         if len(researchers_matched_im) == 0:
             logger.info(f"Present in A3 but not on iMarina, is a new researcher to add to iMarina")
