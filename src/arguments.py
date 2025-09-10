@@ -17,7 +17,8 @@ def parse_step(value):
 def parse_path(value):
     return value
 
-#TODO add args for countries dictio, jobs dcitio, imarina input and a3 input
+
+#TODO add args for countries dictio, jobs dictio, imarina input and a3 input
 def parse_arguments():
     """Parse and validate command-line arguments"""
     parser = argparse.ArgumentParser(description="iMarina-load")
@@ -26,6 +27,20 @@ def parse_arguments():
                         help="Step to perform. Valid options are build, upload and all")
     parser.add_argument("-u", "--upload", "--upload-path", type=parse_path, required=False,
                         help="Path of the file to upload")
+
+    #new arguments for --countries-dict , --jobs-dict , --imarina-input , --a3-input
+    parser.add_argument("--countries-dict", type=parse_path, required=False,
+                        help="Path of the countries dictionary file")
+
+    parser.add_argument(
+        "--jobs-dict", type=parse_path, required=False,
+                        help="Path of the jobs dictionary file")
+
+    parser.add_argument("--imarina-input", type=parse_path, required=False,
+                        help="Path to iMarina input file")
+
+    parser.add_argument("-a3-input", type=parse_path, required=False,
+                        help="Path to A3 input file")
 
     args = parser.parse_args()
     return args
@@ -49,5 +64,3 @@ def process_parse_arguments():
         exit(1)
 
     return args
-
-
