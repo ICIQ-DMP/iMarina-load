@@ -16,6 +16,7 @@ from secret import read_secret
 
 class Researcher:
 
+    # TODO convert to named args constructor (kwargs **)
     def __init__(self, dni, email, name, surname, second_surname, orcid, ini_date, end_date, sex, personal_web,
                  signature, signature_custom, country, born_country, job_description):
         self.dni = dni
@@ -160,8 +161,8 @@ def parse_a3_row_data(row, translator):
                       signature="",
                       signature_custom="",
                       country=row.values[A3_Field.COUNTRY.value],
-                      born_country=row.values[A3_Field.BORN_COUNTRY.value],
-                      job_description= translator[A3_Field.JOB_DESCRIPTION][row.values[A3_Field.JOB_DESCRIPTION.value]]     # TODO
+                      born_country=translator[A3_Field.COUNTRY][row.values[A3_Field.BORN_COUNTRY.value]],
+                      job_description=translator[A3_Field.JOB_DESCRIPTION][row.values[A3_Field.JOB_DESCRIPTION.value]]     # TODO
                       )
     return data
 
@@ -186,25 +187,12 @@ def unparse_researcher_to_imarina_row(data: Researcher, empty_output_row):
     empty_output_row.iat[0, IMarina_Field.PERSONAL_WEB.value] = data.personal_web
     empty_output_row.iat[0, IMarina_Field.SIGNATURE.value] = data.signature
     empty_output_row.iat[0, IMarina_Field.SIGNATURE_CUSTOM.value] = data.signature_custom
+    empty_output_row.iat[0, IMarina_Field.COUNTRY.value] = data.country
     empty_output_row.iat[0, IMarina_Field.JOB_DESCRIPTION.value] = data.job_description
 
-    # Born country not available in iMarina
 
 
-def merge_a3_into_imarina(a3: Researcher, imarina: Researcher):
-    ret = imarina.copy()
-    ret.dni = a3.dni
-    ret.email = a3.email
-    ret.orcid = a3.orcid
-    ret.name = a3.name
-    ret.surname = a3.surname
-    ret.second_surname = a3.second_surname
-    ret.ini_date = a3.ini_date
-    ret.end_date = a3.end_date
-    ret.sex = a3.sex
-    ret.personal_web = a3.personal_web
-    ret.signature = a3.signature
-    ret.signature_custom = a3.signature_custom
+
 
 
 def parse_two_columns(df, key: int, value: int, func_apply_key=None, func_apply_value=None):

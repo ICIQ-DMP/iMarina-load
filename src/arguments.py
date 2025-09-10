@@ -17,7 +17,7 @@ def parse_step(value):
 def parse_path(value):
     return value
 
-
+#TODO add args for countries dictio, jobs dcitio, imarina input and a3 input
 def parse_arguments():
     """Parse and validate command-line arguments"""
     parser = argparse.ArgumentParser(description="iMarina-load")
