@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 
 
@@ -21,6 +22,8 @@ def parse_path(value):
 #TODO add args for countries dictio, jobs dictio, imarina input and a3 input
 def parse_arguments():
     """Parse and validate command-line arguments"""
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
     parser = argparse.ArgumentParser(description="iMarina-load")
 
     parser.add_argument("-s", "--step", type=parse_step, required=False, default="all",
@@ -29,18 +32,22 @@ def parse_arguments():
                         help="Path of the file to upload")
 
     #new arguments for --countries-dict , --jobs-dict , --imarina-input , --a3-input
-    parser.add_argument("--countries-dict", type=parse_path, required=False,
+    parser.add_argument("--countries-dict", type=parse_path, required=False, default=os.path.join(root_dir, "input", "countries.xlsx"),
                         help="Path of the countries dictionary file")
 
     parser.add_argument(
-        "--jobs-dict", type=parse_path, required=False,
+                       "--jobs-dict", type=parse_path, required=False, default=os.path.join(root_dir, "input", "Job_Descriptions.xlsx"),
                         help="Path of the jobs dictionary file")
 
-    parser.add_argument("--imarina-input", type=parse_path, required=False,
-                        help="Path to iMarina input file")
 
-    parser.add_argument("-a3-input", type=parse_path, required=False,
-                        help="Path to A3 input file")
+
+
+    parser.add_argument("--imarina-input", type=parse_path, required=False, default=os.path.join(root_dir, "input", "iMarina.xlsx"),
+                         help="Path of the iMarina input file (.xlsx)")
+
+
+    parser.add_argument("--a3-input", type=parse_path, required=False, default=os.path.join(root_dir, "input" , "A3.xlsx"),
+                        help="Path to A3 input file(.xlsx)")
 
     args = parser.parse_args()
     return args
