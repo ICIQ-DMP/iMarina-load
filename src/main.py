@@ -17,23 +17,23 @@ from secret import read_secret
 class Researcher:
 
     # TODO convert to named args constructor (kwargs **)
-    def __init__(self, dni, email, name, surname, second_surname, orcid, ini_date, end_date, sex, personal_web,
-                 signature, signature_custom, country, born_country, job_description):
-        self.dni = dni
-        self.email = email
-        self.name = name
-        self.surname = surname
-        self.second_surname = second_surname
-        self.orcid = orcid
-        self.ini_date = ini_date
-        self.end_date = end_date
-        self.sex = sex
-        self.personal_web = personal_web
-        self.signature = signature
-        self.signature_custom = signature_custom
-        self.country = country
-        self.born_country = born_country
-        self.job_description = job_description
+    def __init__(self, **kwargs):
+        self.dni = kwargs.get("dni")
+        self.email = kwargs.get("email")
+        self.name = kwargs.get("name")
+        self.surname = kwargs.get("surname")
+        self.second_surname = kwargs.get("second_surname")
+        self.orcid = kwargs.get("orcid")
+        self.ini_date = kwargs.get("ini_date")
+        self.end_date = kwargs.get("end_date")
+        self.sex = kwargs.get("sex")
+        self.personal_web = kwargs.get("personal_web")
+        self.signature = kwargs.get("signature")
+        self.signature_custom = kwargs.get("signature_custom")
+        self.country = kwargs.get("country")
+        self.born_country = kwargs.get("born_country")
+        self.job_description = kwargs.get("job_description")
+
 
     def __str__(self):
         return (
@@ -56,21 +56,23 @@ class Researcher:
         )
 
     def copy(self):
-        return Researcher(self.dni,
-                          self.email,
-                          self.name,
-                          self.surname,
-                          self.second_surname,
-                          self.orcid,
-                          self.ini_date,
-                          self.end_date,
-                          self.sex,
-                          self.personal_web,
-                          self.signature,
-                          self.signature_custom,
-                          self.country,
-                          self.born_country,
-                          self.job_description)
+        return Researcher(
+            dni=self.dni,
+            email=self.email,
+            name=self.name,
+            surname=self.surname,
+            second_surname=self.second_surname,
+            orcid=self.orcid,
+            ini_date=self.ini_date,
+            end_date=self.end_date,
+            sex=self.sex,
+            personal_web=self.personal_web,
+            signature=self.signature,
+            signature_custom=self.signature_custom,
+            country=self.country,
+            born_country=self.born_country,
+            job_description=self.job_description,
+                          )
 
 
 class A3_Field(Enum):
