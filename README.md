@@ -163,9 +163,12 @@ Thanks again!
 
 ### Top contributors:
 
-<a href="https://github.com/github_username/repo_name/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=github_username/repo_name" alt="contrib.rocks image" />
+<a href="https://github.com/AleixMT">
+   <img src="https://avatars.githubusercontent.com/AleixMT" width="80px" alt="usuario"/>
+  
 </a>
+
+
 
 
 
