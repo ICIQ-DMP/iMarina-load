@@ -168,6 +168,23 @@ Thanks again!
   
 </a>
 
+<a href="https://github.com/AleixMT">
+   <img src="https://avatars.githubusercontent.com/AleixMT" width="80px" alt="usuario"/>
+  
+</a>
+
+<a href="https://github.com/MARIO31XD">
+   <img src="https://avatars.githubusercontent.com/MARIO31XD" width="80px" alt="usuario"/>
+  
+</a>
+
+
+
+
+
+
+
+
 
 
 
