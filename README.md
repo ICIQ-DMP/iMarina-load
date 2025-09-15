@@ -21,7 +21,7 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
-[![Issues][https://github.com/ICIQ-DMP/iMarina-load/issues]][issues-url]
+[![Issues][issues-shield]][issues-url]
 [![project_license][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -101,25 +101,19 @@ Here's a blank template to get started. To avoid retyping too much info, do a se
 * [![Laravel][Laravel.com]][Laravel-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
-*  [![Python][https://es.python.org/]][Bootstrap-url]
+* [![Python][python.py/]][Python-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- GETTING STARTED -->
-## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+<!-- vacio -->
 
-### Prerequisites
+<!-- Prerequisites -->
+<!-- vacio -->
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ## Usage
 Install python
@@ -140,13 +134,13 @@ python3 -m venv venv
 ```
 
 
-<!-- ROADMAP -->
+<!-- ROADMAP for issues -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [x] [#1: Implement awesome README template] (https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
+- [x] [#2: Finish arguments for flexible location of paths ] (https://github.com/ICIQ-DMP/iMarina-load/issues/2)
+- [ ] [#3: Find out equivalence of job description for personal web] (https://github.com/ICIQ-DMP/iMarina-load/issues/3)
+- [ ] [#4:Configure IP connection over imarina #4 ] (https://github.com/ICIQ-DMP/iMarina-load/issues/4)
 
 See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
 
