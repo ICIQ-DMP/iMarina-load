@@ -198,8 +198,8 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
- - (https://twitter.com/twitter_handle) - mpique@iciq.es
- - (https://twitter.com/twitter_handle) - amarine@iciq.es
+- mpique@iciq.es
+- amarine@iciq.es
 
 Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/github_username/repo_name)
 
