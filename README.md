@@ -21,7 +21,7 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
+[![Issues][https://github.com/ICIQ-DMP/iMarina-load/issues]][issues-url]
 [![project_license][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -30,8 +30,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="[https://github.com/github_username/repo_name](https://github.com/ICIQ-DMP/iMarina-load)">
+    <img src="Downloads/logo_iciq.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">iMarina-load</h3>
@@ -39,14 +39,14 @@
   <p align="center">
     Scripts to obtain A3 data, transform it into iMarina load format, and upload it to iMarina server using SFTP
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong> »</strong></a>
+    <a href="https://github.com/ICIQ-DMP/iMarina-load"><strong> »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name"></a>
+    <a href="https://github.com/ICIQ-DMP/iMarina-load"></a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md"></a>
+    <a href="https://github.com/ICIQ-DMP/iMarina-load"></a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md"></a>
+    <a href="https://github.com/ICIQ-DMP/iMarina-load"></a>
   </p>
 </div>
 
@@ -101,6 +101,7 @@ Here's a blank template to get started. To avoid retyping too much info, do a se
 * [![Laravel][Laravel.com]][Laravel-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
+*  [![Python][https://es.python.org/]][Bootstrap-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
