@@ -131,7 +131,7 @@ python3 -m venv venv
 
 
 <!-- ROADMAP for issues -->
-## Roadmap
+## Roadmap (issues)
 
 - [x] [#1: Implement awesome README template] (https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
 - [x] [#2: Finish arguments for flexible location of paths ] (https://github.com/ICIQ-DMP/iMarina-load/issues/2)
