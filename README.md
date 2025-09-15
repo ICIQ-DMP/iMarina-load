@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="[https://github.com/github_username/repo_name](https://github.com/ICIQ-DMP/iMarina-load)">
-    <img src="Downloads/logo_iciq.png" alt="Logo" width="80" height="80">
+    <img src="images/logo_iciq.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">iMarina-load</h3>
