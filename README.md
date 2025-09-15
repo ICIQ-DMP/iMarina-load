@@ -82,16 +82,13 @@
 
 <!-- ABOUT THE PROJECT -->
 
+ <!--  [![Product Name Screen Shot][product-screenshot]](https://example.com)  -->
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started. To avoid retyping too much info, do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`, `project_license`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-### Built With
+### Project main language
 
 * [![Next][Next.js]][Next-url]
 * [![React][React.js]][React-url]
@@ -101,7 +98,8 @@ Here's a blank template to get started. To avoid retyping too much info, do a se
 * [![Laravel][Laravel.com]][Laravel-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
-* [![Python][python.py/]][Python-url]
+* [![Python][Python]][Python-url]
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -234,3 +232,5 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
+[Python]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
+[Python-url]: https://www.python.org/
