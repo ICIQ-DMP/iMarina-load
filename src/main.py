@@ -318,18 +318,21 @@ def upload_excel(excel_path):
     logger.info('Closed connection.')
 
 
-def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarina_path):
+def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarina_path, a3_path):
     logger = setup_logger("Excel build", "./logs/log.log", level=logging.DEBUG)
 
     today = date.today()
 
     # Get A3 data
-    a3_path = os.path.join(input_dir, "A3.xlsx")
     a3_data = pd.read_excel(a3_path, header=2)
     a3_data = a3_data.iloc[3:]
 
     # Get iMarina last upload data
     im_data = pd.read_excel(imarina_path, header=0)
+
+
+
+
 
     output_data = im_data[0:0]  # retains columns, types, and headers if any
     empty_row_output_data = build_empty_row(imarina_dataframe=im_data)
@@ -411,9 +414,9 @@ def main():
     excel_name = "iMarina_upload_" + datetime.datetime.today().__str__() + ".xlsx"
     output_path = os.path.join(root_dir, 'output', excel_name)
 
-
+    #pass the args create in arguments.py
     if args.step == "build" or args.step == "all":
-        build_upload_excel(input_dir, output_path, args.countries_dict, args.jobs_dict, args.imarina_input)
+        build_upload_excel(input_dir, output_path, args.countries_dict, args.jobs_dict, args.imarina_input, args.a3_input)
     if args.step == "upload" or args.step == "all":
         if args.upload:
             upload_excel(args.upload)

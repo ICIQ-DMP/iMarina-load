@@ -33,18 +33,14 @@ def parse_arguments():
 
     #new arguments for --countries-dict , --jobs-dict , --imarina-input , --a3-input
     parser.add_argument("--countries-dict", type=parse_path, required=False, default=os.path.join(root_dir, "input", "countries.xlsx"),
-                        help="Path of the countries dictionary file")
+                        help="Path of the countries dictionary file(.xlsx)")
 
     parser.add_argument(
                        "--jobs-dict", type=parse_path, required=False, default=os.path.join(root_dir, "input", "Job_Descriptions.xlsx"),
-                        help="Path of the jobs dictionary file")
-
-
-
+                        help="Path of the jobs dictionary file(.xlsx)")
 
     parser.add_argument("--imarina-input", type=parse_path, required=False, default=os.path.join(root_dir, "input", "iMarina.xlsx"),
-                         help="Path of the iMarina input file (.xlsx)")
-
+                         help="Path of the iMarina input file(.xlsx)")
 
     parser.add_argument("--a3-input", type=parse_path, required=False, default=os.path.join(root_dir, "input" , "A3.xlsx"),
                         help="Path to A3 input file(.xlsx)")
