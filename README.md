@@ -132,7 +132,7 @@ python3 -m venv venv
 - [x] [#1: Implement awesome README template] (https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
 - [x] [#2: Finish arguments for flexible location of paths ] (https://github.com/ICIQ-DMP/iMarina-load/issues/2)
 - [ ] [#3: Find out equivalence of job description for personal web] (https://github.com/ICIQ-DMP/iMarina-load/issues/3)
-- [ ] [#4:Configure IP connection over imarina #4 ] (https://github.com/ICIQ-DMP/iMarina-load/issues/4)
+- [x] [#4:Configure IP connection over imarina #4 ] (https://github.com/ICIQ-DMP/iMarina-load/issues/4)
 
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load) for a full list of proposed features (and known issues).
 
