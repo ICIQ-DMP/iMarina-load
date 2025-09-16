@@ -192,14 +192,14 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 
 
 <!-- ACKNOWLEDGMENTS (agradecimientos) -->
-## Acknowledgments
 
+<!--
 * []()
 * []()
 * []()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+-->
 
 
 
