@@ -16,7 +16,7 @@ from secret import read_secret
 
 class Researcher:
 
-    # TODO convert to named args constructor (kwargs **)
+
     def __init__(self, **kwargs):
         self.dni = kwargs.get("dni")
         self.email = kwargs.get("email")
@@ -164,7 +164,7 @@ def parse_a3_row_data(row, translator):
                       signature_custom="",
                       country=row.values[A3_Field.COUNTRY.value],
                       born_country=translator[A3_Field.COUNTRY][row.values[A3_Field.BORN_COUNTRY.value]],
-                      job_description=translator[A3_Field.JOB_DESCRIPTION][row.values[A3_Field.JOB_DESCRIPTION.value]]     # TODO
+                      job_description=translator[A3_Field.JOB_DESCRIPTION][row.values[A3_Field.JOB_DESCRIPTION.value]]
                       )
     return data
 
@@ -243,7 +243,16 @@ def build_translations(countries_path, jobs_path):
     for key in jobs.keys():
         r[A3_Field.JOB_DESCRIPTION][key] = jobs[key]
 
+    # in progress
+    DEFAULT_WEB = "https://www.iciq.org"
+    r[A3_Field.PERSONAL_WEB] = {}
+    jobs = build_jobs_translator(jobs_path)
+    for key in jobs.keys():
+        r[A3_Field.PERSONAL_WEB][key] = jobs[key] or DEFAULT_WEB
+
     return r
+
+
 
 
 def is_same_person(imarina_row, a3_row):
@@ -339,12 +348,13 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
 
     translator = build_translations(countries_path, jobs_path)
 
+
     # Phase 1: Check if the researchers in iMarina are still in A3
     not_present = 0
     for index, row in im_data.iterrows():
         print("Processing data from: " + row.values[1] + " " + row.values[2])
 
-        researcher_imarina = parse_imarina_row_data(row, translator)
+        researcher_imarina = parse_imarina_row_data(row, translator,)
         researchers_matched_a3 = search_data(researcher_imarina, a3_data, parse_a3_row_data, translator)
         empty_row = empty_row_output_data.copy()
         if len(researchers_matched_a3) == 0:

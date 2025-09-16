@@ -19,7 +19,7 @@ def parse_path(value):
     return value
 
 
-#TODO add args for countries dictio, jobs dictio, imarina input and a3 input
+
 def parse_arguments():
     """Parse and validate command-line arguments"""
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
