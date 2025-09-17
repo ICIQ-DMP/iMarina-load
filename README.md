@@ -23,7 +23,10 @@
 
 
 
+[linkedin-shield]: https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white
 [linkedin-url]: https://es.linkedin.com/company/iciq
+
+
 [contributors-url]: https://github.com/ICIQ-DMP/iMarina-load/graphs/contributors
 [forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
 [stars-url]: https://github.com/ICIQ-DMP/iMarina-load/stargazers
