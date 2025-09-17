@@ -32,12 +32,16 @@
 
 
 [forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
+[forks-url]: https://img.shields.io/badge/Forks-lightblue?style=for-the-badge&logo=github&logoColor=white
+
 
 
 [stars-url]: https://github.com/ICIQ-DMP/iMarina-load/stargazers
+[stars-shield]: https://img.shields.io/badge/Stars-yellow?style=for-the-badge&logo=github&logoColor=white
 
 
 [issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
+[issues-url]: https://img.shields.io/badge/Issues-red?style=for-the-badge&logo=github&logoColor=white
 
 [license-shield]: https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=github
 [license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE
