@@ -28,6 +28,7 @@
 
 
 [contributors-url]: https://github.com/ICIQ-DMP/iMarina-load/graphs/contributors
+[contributors-shield]: https://img.shields.io/badge/Contributors-green?style=for-the-badge&logo=github&logoColor=white
 
 
 [forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
