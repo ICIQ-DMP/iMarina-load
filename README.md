@@ -28,9 +28,17 @@
 
 
 [contributors-url]: https://github.com/ICIQ-DMP/iMarina-load/graphs/contributors
+
+
 [forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
+
+
 [stars-url]: https://github.com/ICIQ-DMP/iMarina-load/stargazers
+
+
 [issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
+
+[license-shield]: https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=github
 [license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE
 
 
