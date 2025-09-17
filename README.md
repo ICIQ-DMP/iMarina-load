@@ -32,7 +32,7 @@
 
 
 [forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
-[forks-url]: https://img.shields.io/badge/Forks-lightblue?style=for-the-badge&logo=github&logoColor=white
+[forks-url]: https://img.shields.io/badge/Forks-blue?style=for-the-badge&logo=github&logoColor=white
 
 
 
