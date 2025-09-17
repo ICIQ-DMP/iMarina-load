@@ -15,6 +15,7 @@ def test_build_translations():
     assert False
 
 
+#test de prueba suma
 def test_demo():
     assert 1 + 1 == 2
 
