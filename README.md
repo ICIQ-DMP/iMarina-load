@@ -22,7 +22,13 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
+
 [linkedin-url]: https://es.linkedin.com/company/iciq
+[contributors-url]: https://github.com/ICIQ-DMP/iMarina-load/graphs/contributors
+[forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
+[stars-url]: https://github.com/ICIQ-DMP/iMarina-load/stargazers
+[issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
+[license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE
 
 
 
