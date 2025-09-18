@@ -220,15 +220,15 @@ def build_countries_translator(path):
 
 
 def build_jobs_translator(path):
-    df = read_dataframe(path, 0, None)
-    return parse_two_columns(df, 0, 1)
+    dff = read_dataframe(path, 0, None)
+    return parse_two_columns(dff, 0, 1)
 
 
 def apply_defaults(researcher: Researcher):
     researcher.personal_web = "https://iciq.es"
 
 
-def build_translations(countries_path, jobs_path):
+def build_translations(countries_path, jobs_path, personal_web_path):
     r = {A3_Field.SEX: {}}
     r[A3_Field.SEX]["Mujer"] = "Woman"
     r[A3_Field.SEX]["Hombre"] = "Man"
@@ -246,10 +246,9 @@ def build_translations(countries_path, jobs_path):
     # in progress
     DEFAULT_WEB = "https://www.iciq.org"
     r[A3_Field.PERSONAL_WEB] = {}
-    jobs = build_jobs_translator(jobs_path)
-    for key in jobs.keys():
-        r[A3_Field.PERSONAL_WEB][key] = jobs[key] or DEFAULT_WEB
-
+    personal_webs = build_jobs_translator(personal_web_path)
+    for key in personal_webs.keys():
+        r[A3_Field.PERSONAL_WEB][key] = personal_webs[key] or DEFAULT_WEB
     return r
 
 
