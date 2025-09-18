@@ -76,7 +76,7 @@
 </div>
 
 
-
+<!--
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -102,6 +102,8 @@
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
+
+-->
 
 
 <!-- ABOUT THE PROJECT -->
