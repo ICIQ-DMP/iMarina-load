@@ -151,6 +151,7 @@ def parse_imarina_row_data(row, translator):
 
 
 def parse_a3_row_data(row, translator):
+    DEFAULT_WEB = "https://www.iciq.org"
     data = Researcher(dni=row.values[A3_Field.DNI.value], email=row.values[A3_Field.EMAIL.value],
                       orcid=row.values[A3_Field.ORCID.value],
                       name=row.values[A3_Field.NAME.value],
@@ -159,7 +160,9 @@ def parse_a3_row_data(row, translator):
                       ini_date=sanitize_date(row.values[A3_Field.INI_DATE.value]),
                       end_date=sanitize_date(row.values[A3_Field.END_DATE.value]),
                       sex=row.values[A3_Field.SEX.value],
-                      personal_web="",
+                      personal_web=translator[A3_Field.PERSONAL_WEB].get(
+                          row.values[A3_Field.JOB_DESCRIPTION.value], DEFAULT_WEB
+                      ),
                       signature="",
                       signature_custom="",
                       country=row.values[A3_Field.COUNTRY.value],
@@ -252,8 +255,6 @@ def build_translations(countries_path, jobs_path, personal_web_path):
     return r
 
 
-
-
 def is_same_person(imarina_row, a3_row):
     if isinstance(imarina_row.orcid, str) and isinstance(a3_row.orcid, str):
         if imarina_row.orcid.replace("-", "") == a3_row.orcid:
@@ -326,7 +327,7 @@ def upload_excel(excel_path):
     logger.info('Closed connection.')
 
 
-def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarina_path, a3_path):
+def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarina_path, a3_path,):
     logger = setup_logger("Excel build", "./logs/log.log", level=logging.DEBUG)
 
     today = date.today()
@@ -342,10 +343,13 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
 
 
 
+
     output_data = im_data[0:0]  # retains columns, types, and headers if any
     empty_row_output_data = build_empty_row(imarina_dataframe=im_data)
 
-    translator = build_translations(countries_path, jobs_path)
+    personal_web_path = "input/Personal_web.xlsx"
+
+    translator = build_translations(countries_path, jobs_path, personal_web_path)
 
 
     # Phase 1: Check if the researchers in iMarina are still in A3
