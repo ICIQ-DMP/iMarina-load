@@ -25,8 +25,7 @@
 
 
 
-[stars-url]: https://github.com/ICIQ-DMP/iMarina-load/stargazers
-[stars-shield]: https://img.shields.io/badge/Stars-yellow?style=for-the-badge&logo=github&logoColor=white
+
 
 
 [issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
@@ -245,8 +244,8 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 [contributors-url]: https://github.com/ICIQ-DMP/iMarina-load/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
+[stars-shield]: https://img.shields.io/github/stars/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
+[stars-url]: https://github.com/ICIQ-DMP/iMarina-load/stargazers
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
 [issues-url]: https://github.com/github_username/repo_name/issues
 [license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
