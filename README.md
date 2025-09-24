@@ -246,8 +246,8 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 [forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
 [stars-shield]: https://img.shields.io/github/stars/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [stars-url]: https://github.com/ICIQ-DMP/iMarina-load/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
+[issues-shield]: https://img.shields.io/github/issues/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
+[issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
 [license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
 [license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white
