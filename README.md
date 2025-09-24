@@ -243,7 +243,7 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [contributors-url]: https://github.com/ICIQ-DMP/iMarina-load/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [forks-url]: https://github.com/ICIQ-DMP/iMarina-load/forks
 [stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
 [stars-url]: https://github.com/github_username/repo_name/stargazers
