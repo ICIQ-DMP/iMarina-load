@@ -54,16 +54,42 @@
   <p align="center">
     Scripts to obtain A3 data, transform it into iMarina load format, and upload it to iMarina server using SFTP
     <br />
-    <a href="https://github.com/ICIQ-DMP/iMarina-load"><strong> »</strong></a>
+    <a href="https://iciq-dmp.github.io/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/ICIQ-DMP/iMarina-load"></a>
+    <a href="https://github.com/ICIQ-DMP/iMarina-load">View Demo</a>
     &middot;
-    <a href="https://github.com/ICIQ-DMP/iMarina-load"></a>
+    <a href="https://github.com/ICIQ-DMP/iMarina-load/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
-    <a href="https://github.com/ICIQ-DMP/iMarina-load"></a>
+    <a href="https://github.com/ICIQ-DMP/iMarina-load/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
+
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Best-README-Template</h3>
+
+  <p align="center">
+    An awesome README template to jumpstart your projects!
+    <br />
+    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    &middot;
+    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    &middot;
+    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+  </p>
+</div>
+
+
 
 
 
@@ -123,14 +149,6 @@
 
 ### Built with
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
 * [![Python][Python]][Python-url]
 
 
@@ -139,39 +157,50 @@
 
 
 <!-- GETTING STARTED -->
+## Getting Started
 
-<!-- vacio -->
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
 
-<!-- Prerequisites -->
-<!-- vacio -->
+### Prerequisites
 
+This is an example of how to list things you need to use the software and how to install them.
 
-## Usage
 Install python
 
 In my Ubuntu is:
 
-```
+```shell
 sudo apt install python3.12-venv gcc build-essential -y
 ```
 
+### Installation
+
 Initialize venv
 
-```
+```shell
 cd iMarina
 python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt 
-
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+## Usage
+
+
+
 
 
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
 
-- [ ] [#1: Implement awesome README template] (https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
-- [x] [#2: Finish arguments for flexible location of paths ] (https://github.com/ICIQ-DMP/iMarina-load/issues/2)
-- [ ] [#3: Find out equivalence of job description for personal web] (https://github.com/ICIQ-DMP/iMarina-load/issues/3)
-- [x] [#4:Configure IP connection over imarina #4 ] (https://github.com/ICIQ-DMP/iMarina-load/issues/4)
+- [ ] [#1: Implement awesome README template](https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
+- [x] [#2: Finish arguments for flexible location of paths](https://github.com/ICIQ-DMP/iMarina-load/issues/2)
+- [ ] [#3: Find out equivalence of job description for personal web](https://github.com/ICIQ-DMP/iMarina-load/issues/3)
+- [x] [#4:Configure IP connection over imarina #4 ](https://github.com/ICIQ-DMP/iMarina-load/issues/4)
 
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load) for a full list of proposed features (and known issues).
 
@@ -200,23 +229,22 @@ Thanks again!
 
 <a href="https://github.com/AleixMT">
    <img src="https://avatars.githubusercontent.com/AleixMT" width="80px" alt="usuario"/>
-  
 </a>
-
-
 
 <a href="https://github.com/MARIO31XD">
    <img src="https://avatars.githubusercontent.com/MARIO31XD" width="80px" alt="usuario"/>
-  
 </a>
+
 
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the project_license. See [LICENSE](https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE) for more information.
+Distributed under the GNU GPL v3. See [LICENSE](https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE) for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 
 <!-- CONTACT -->
 ## Contact
@@ -224,21 +252,12 @@ Distributed under the project_license. See [LICENSE](https://github.com/ICIQ-DMP
 - mpique@iciq.es
 - amarine@iciq.es
 
+
+Your Name - (mpique@iciq.es)[mpique@iciq.es]
+
 Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/github_username/repo_name)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS (agradecimientos) -->
-
-<!--
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
--->
 
 
 
@@ -260,21 +279,6 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 
 
 [product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+
 [Python]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
 [Python-url]: https://www.python.org/
