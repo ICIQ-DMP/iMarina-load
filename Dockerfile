@@ -5,7 +5,7 @@ FROM python:3.12-alpine3.20
 LABEL authors="mpique"
 
 # work directory in the container
-WORKDIR /app
+WORKDIR /iMarina-load
 
 # copy requirements
 COPY requirements.txt .
