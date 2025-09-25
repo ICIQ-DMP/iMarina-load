@@ -13,7 +13,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![project_license][license-shield]][license-url]
+[![License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -202,7 +202,7 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 [issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
 [issues-url]: https://img.shields.io/badge/Issues-red?style=for-the-badge&logo=github&logoColor=white
 [license-shield]: https://img.shields.io/github/license/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
-[license-url]: (https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE.txt)
+[license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE.txt
 
 [license-shield]: https://img.shields.io/github/license/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [license-url]:https://github.com/ICIQ-DMP/iMarina-load/blob/master
