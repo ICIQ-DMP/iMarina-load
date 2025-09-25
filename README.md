@@ -202,7 +202,7 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 [issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
 [issues-url]: https://img.shields.io/badge/Issues-red?style=for-the-badge&logo=github&logoColor=white
 [license-shield]: https://img.shields.io/github/license/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
-[license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE.txt
+[license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE
 
 [license-shield]: https://img.shields.io/github/license/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [license-url]:https://github.com/ICIQ-DMP/iMarina-load/blob/master
