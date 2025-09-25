@@ -8,5 +8,5 @@ services:
     tty: true
     command: >
       sh -c "ls -l /app/input && python /app/src/main.py --imarina-input /app/input/iMarina.xlsx --a3-input /app/input/A3.xlsx --countries-dict /app/input/countries.xlsx --jobs-dict /app/input/Job_Descriptions.xlsx"
-    
+      
 
