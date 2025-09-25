@@ -133,7 +133,7 @@ python3 -m venv venv
 - [ ] [#3: Find out equivalence of job description for personal web](https://github.com/ICIQ-DMP/iMarina-load/issues/3)
 - [x] [#4:Configure IP connection over imarina #4 ](https://github.com/ICIQ-DMP/iMarina-load/issues/4)
 
-See the [open issues](https://github.com/ICIQ-DMP/iMarina-load) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/ICIQ-DMP/iMarina-load/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
