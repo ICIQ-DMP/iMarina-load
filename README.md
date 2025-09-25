@@ -17,26 +17,6 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -61,11 +41,6 @@
 </div>
 
  
-
-
-
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
 
@@ -103,19 +78,7 @@
 </details>
 
 
-
-
-
-
-  
-
-
-
-
-
 <!-- ABOUT THE PROJECT -->
-
- 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -126,8 +89,6 @@
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -164,9 +125,6 @@ python3 -m venv venv
 ## Usage
 
 
-
-
-
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
 
@@ -178,7 +136,6 @@ python3 -m venv venv
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
@@ -209,14 +166,12 @@ Thanks again!
 </a>
 
 
-
 <!-- LICENSE -->
 ## License
 
 Distributed under the GNU GPL v3. See [LICENSE](https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE) for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
@@ -249,7 +204,7 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 [license-shield]: https://img.shields.io/github/license/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE.txt
 
-[license-shield]: https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=github
+[license-shield]: https://img.shields.io/github/license/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE
 
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white
