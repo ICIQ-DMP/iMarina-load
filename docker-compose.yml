@@ -1,6 +1,9 @@
-version: "3.9"
-
 services:
   app:
     build: .
     container_name: iMarina_docker
+    volumes:
+    - ./input:/app/input
+    stdin_open: true
+    tty: true
+

@@ -4,14 +4,16 @@ FROM python:3.12-alpine3.20
 
 LABEL authors="mpique"
 
-# work directory in the container
-WORKDIR /iMarina-load
+RUN mkdir -p /input
 
-# copy requirements
-COPY requirements.txt .
+# work directory in the container
+WORKDIR /app
+
+# copy at the app
+COPY . /app
 
 # install requirements
 RUN pip install --no-cache-dir -r requirements.txt
 
 # script python for main
-CMD ["python", "main.py"]
+CMD ["python", "/app/src/main.py", "--imarina-input", "/input/iMarina.xlsx", "--a3-input", "/input/A3.xlsx", "--countries-dict", "/input/countries.xlsx", "--jobs-dict", "/input/Job_Descriptions.xlsx"]
