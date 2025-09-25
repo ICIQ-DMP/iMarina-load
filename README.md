@@ -177,10 +177,6 @@ Distributed under the GNU GPL v3. See [LICENSE](https://github.com/ICIQ-DMP/iMar
 <!-- CONTACT -->
 ## Contact
 
-- mpique@iciq.es
-- amarine@iciq.es
-
-
 Mario Piqué - (mpique@iciq.es)[mpique@iciq.es]
 
 Aleix Mariné - (amarine@iciq.es)[amarine@iciq.es]
