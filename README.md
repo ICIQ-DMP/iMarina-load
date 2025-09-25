@@ -28,11 +28,8 @@
 
 
 
-[issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
-[issues-url]: https://img.shields.io/badge/Issues-red?style=for-the-badge&logo=github&logoColor=white
 
-[license-shield]: https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=github
-[license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE
+
 
 
 
@@ -249,8 +246,13 @@ Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/gith
 [stars-url]: https://github.com/ICIQ-DMP/iMarina-load/stargazers
 [issues-shield]: https://img.shields.io/github/issues/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
 [issues-url]: https://github.com/ICIQ-DMP/iMarina-load/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
+[issues-url]: https://img.shields.io/badge/Issues-red?style=for-the-badge&logo=github&logoColor=white
+[license-shield]: https://img.shields.io/github/license/ICIQ-DMP/iMarina-load.svg?style=for-the-badge
+[license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE.txt
+
+[license-shield]: https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=github
+[license-url]: https://github.com/ICIQ-DMP/iMarina-load/blob/master/LICENSE
+
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white
 [linkedin-url]: https://es.linkedin.com/company/iciq
 
