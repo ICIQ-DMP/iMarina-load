@@ -96,9 +96,7 @@ Follow these steps to set up the project locally.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-
-Install python
+Install the version python 3.12.3
 
 In my Ubuntu is:
 
@@ -115,6 +113,14 @@ cd iMarina
 python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt 
 ```
+Install the requirements:
+```shell
+pip install --upgrade pip
+```
+```shell
+pip install -r requirements.txt
+```
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -130,6 +136,7 @@ python3 -m venv venv
 - [x] [#2: Finish arguments for flexible location of paths](https://github.com/ICIQ-DMP/iMarina-load/issues/2)
 - [ ] [#3: Find out equivalence of job description for personal web](https://github.com/ICIQ-DMP/iMarina-load/issues/3)
 - [x] [#4:Configure IP connection over imarina #4 ](https://github.com/ICIQ-DMP/iMarina-load/issues/4)
+- [ ] 
 
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load/issues) for a full list of proposed features (and known issues).
 
