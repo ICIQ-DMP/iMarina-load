@@ -113,7 +113,7 @@ cd iMarina
 python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt 
 ```
-Install the requirements:
+Install the requirements
 ```shell
 pip install --upgrade pip
 ```
@@ -121,13 +121,15 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
 ## Usage
+To start the program them execute this command
+```shell
+./venv/bin/python src/main.py -- step build
 
+```
 
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
@@ -136,7 +138,7 @@ pip install -r requirements.txt
 - [x] [#2: Finish arguments for flexible location of paths](https://github.com/ICIQ-DMP/iMarina-load/issues/2)
 - [ ] [#3: Find out equivalence of job description for personal web](https://github.com/ICIQ-DMP/iMarina-load/issues/3)
 - [x] [#4:Configure IP connection over imarina #4 ](https://github.com/ICIQ-DMP/iMarina-load/issues/4)
-- [ ] 
+- [ ] [#5:]()
 
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load/issues) for a full list of proposed features (and known issues).
 
