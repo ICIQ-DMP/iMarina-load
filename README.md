@@ -46,11 +46,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <ul>
-        <li>
-          <a href="#built-with">Built With</a>
-        </li>
-      </ul>
+      <a href="#built-with">Built With</a>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -80,6 +76,7 @@
     </li>
   </ol>
 </details>
+
 
 
 
