@@ -203,10 +203,6 @@ Distributed under the GNU GPL v3. See [LICENSE](https://github.com/ICIQ-DMP/iMar
 Mario Piqué - (mpique@iciq.es) [mpique@iciq.es]
 
 Aleix Mariné - (amarine@iciq.es) [amarine@iciq.es]
-  
-
-
-Project Link: [https://github.com/ICIQ-DMP/iMarina-load](https://github.com/github_username/repo_name)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
