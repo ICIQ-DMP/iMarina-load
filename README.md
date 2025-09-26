@@ -150,15 +150,30 @@ See the [open issues](https://github.com/ICIQ-DMP/iMarina-load/issues) for a ful
 
 Contributions are welcome and what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-If you want to improve this project, please open an **issue** or submit a **pull request** with your changes.
+If you’d like to report a bug, request a feature, or propose an improvement, please follow these steps:
 
-If you have a suggestion that would make this better.
-You can also simply open an issue or pull request.
-Thanks again!
+Creating an Issue
 
-1. Create your issue
-2. Public your issue
-3. Open a Pull request
+1.Go to the Issues tab
+Navigate to the Issues section of the repository.
+
+2.Click on “New Issue”
+Press the New Issue button to start creating one.
+
+3.Fill in the details
+
+Title: A short, descriptive summary of the issue.
+
+Description: Provide as much context as possible.
+
+For bugs: steps to reproduce, expected vs. actual behavior, environment (OS, Python version, etc.).
+
+For features: explain the motivation and the expected outcome.
+
+Screenshots or logs (if applicable).
+
+4.Publish the issue
+Once completed, click Submit new issue. The maintainers will review it and may ask for further clarification.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
