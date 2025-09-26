@@ -106,6 +106,17 @@ sudo apt install python3.12-venv gcc build-essential -y
 
 ### Installation
 
+Clone repository
+```shell
+git clone https://github.com/ICIQ-DMP/iMarina-load.git
+
+```
+Install git if you don't have it
+```shell
+sudo apt install git -y
+```
+
+
 Initialize venv
 
 ```shell
