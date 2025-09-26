@@ -152,8 +152,8 @@ Contributions are welcome and what make the open source community such an amazin
 
 If you’d like to report a bug, request a feature, or propose an improvement, please follow these steps:
 
-**Creating an Issue
-**
+**Creating an Issue**
+
 1.Go to the Issues tab
 Navigate to the Issues section of the repository.
 
