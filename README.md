@@ -125,7 +125,7 @@ pip install -r requirements.txt
 
 
 ## Usage
-To start the program them execute this command
+To start the program execute this command
 ```shell
 ./venv/bin/python src/main.py -- step build
 
