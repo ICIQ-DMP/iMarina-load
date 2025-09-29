@@ -145,11 +145,12 @@ To start the program execute this command
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
 
-- [ ] [#1: Implement awesome README template](https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
+- [x] [#1: Implement awesome README template](https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
 - [x] [#2: Finish arguments for flexible location of paths](https://github.com/ICIQ-DMP/iMarina-load/issues/2)
 - [ ] [#3: Find out equivalence of job description for personal web](https://github.com/ICIQ-DMP/iMarina-load/issues/3)
 - [x] [#4:Configure IP connection over imarina](https://github.com/ICIQ-DMP/iMarina-load/issues/4)
 - [ ] [#5:DOCKER ENVIRONMENT DEVELOPMENT in process](https://github.com/ICIQ-DMP/iMarina-load/issues/5)
+- [ ] [#6:Remove spurious value "nan" from countries.xlsx](https://github.com/ICIQ-DMP/iMarina-load/issues/6)
       
 
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load/issues) for a full list of proposed features (and known issues).
