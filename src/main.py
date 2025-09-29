@@ -150,7 +150,19 @@ def parse_imarina_row_data(row, translator):
     return data
 
 
-def parse_a3_row_data(row, translator):
+def parse_a3_row_data(row, translator,):
+    #Field born_country
+    born_country = row.values[A3_Field.BORN_COUNTRY.value]
+
+    # if null or empty pass the method strip
+    if pd.isna(born_country) or str(born_country).strip() == "":
+        born_country = None
+
+    # else translate the country only this is null
+    else:
+        key = str(born_country).strip()
+        born_country = translator[A3_Field.COUNTRY].get(key, None)
+
     DEFAULT_WEB = "https://www.iciq.org"
     data = Researcher(dni=row.values[A3_Field.DNI.value], email=row.values[A3_Field.EMAIL.value],
                       orcid=row.values[A3_Field.ORCID.value],
@@ -166,7 +178,6 @@ def parse_a3_row_data(row, translator):
                       signature="",
                       signature_custom="",
                       country=row.values[A3_Field.COUNTRY.value],
-                      born_country=translator[A3_Field.COUNTRY][row.values[A3_Field.BORN_COUNTRY.value]],
                       job_description=translator[A3_Field.JOB_DESCRIPTION][row.values[A3_Field.JOB_DESCRIPTION.value]]
                       )
     return data
