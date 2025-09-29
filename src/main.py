@@ -8,6 +8,7 @@ import os
 from enum import Enum
 
 import paramiko
+from pycparser.ply.yacc import resultlimit
 
 from log import setup_logger
 from arguments import process_parse_arguments
@@ -178,9 +179,12 @@ def parse_a3_row_data(row, translator,):
                       signature="",
                       signature_custom="",
                       country=row.values[A3_Field.COUNTRY.value],
+                      born_country=born_country,
                       job_description=translator[A3_Field.JOB_DESCRIPTION][row.values[A3_Field.JOB_DESCRIPTION.value]]
                       )
+
     return data
+
 
 
 def unparse_date(date):
