@@ -151,20 +151,8 @@ def parse_imarina_row_data(row, translator):
     return data
 
 
-def parse_a3_row_data(row, translator,):
-    #Field born_country
-    born_country = row.values[A3_Field.BORN_COUNTRY.value]
-
-    # if null or empty pass the method strip
-    if pd.isna(born_country) or str(born_country).strip() == "":
-        born_country = None
-
-    # else translate the country only this is null
-    else:
-        key = str(born_country).strip()
-        born_country = translator[A3_Field.COUNTRY].get(key, None)
-
-    DEFAULT_WEB = "https://www.iciq.org"
+def parse_a3_row_data(row, translator):
+    default_web = "https://www.iciq.org"
     data = Researcher(dni=row.values[A3_Field.DNI.value], email=row.values[A3_Field.EMAIL.value],
                       orcid=row.values[A3_Field.ORCID.value],
                       name=row.values[A3_Field.NAME.value],
@@ -174,17 +162,16 @@ def parse_a3_row_data(row, translator,):
                       end_date=sanitize_date(row.values[A3_Field.END_DATE.value]),
                       sex=row.values[A3_Field.SEX.value],
                       personal_web=translator[A3_Field.PERSONAL_WEB].get(
-                          row.values[A3_Field.JOB_DESCRIPTION.value], DEFAULT_WEB
+                          row.values[A3_Field.JOB_DESCRIPTION.value], default_web
                       ),
                       signature="",
                       signature_custom="",
                       country=row.values[A3_Field.COUNTRY.value],
-                      born_country=born_country,
+                      born_country=translator[A3_Field.COUNTRY][row.values[A3_Field.BORN_COUNTRY.value]],
                       job_description=translator[A3_Field.JOB_DESCRIPTION][row.values[A3_Field.JOB_DESCRIPTION.value]]
                       )
 
     return data
-
 
 
 def unparse_date(date):
@@ -232,15 +219,9 @@ def read_dataframe(path, skiprows, header):
     return pd.read_excel(path, skiprows=skiprows, header=header)
 
 
-def build_countries_translator(path):
-    df = read_dataframe(path, 0, None)
+def build_translator(path, skiprows=0):
+    df = read_dataframe(path, skiprows, None)
     return parse_two_columns(df, 0, 1)
-
-
-def build_jobs_translator(path):
-    dff = read_dataframe(path, 0, None)
-    return parse_two_columns(dff, 0, 1)
-
 
 def apply_defaults(researcher: Researcher):
     researcher.personal_web = "https://iciq.es"
@@ -252,21 +233,19 @@ def build_translations(countries_path, jobs_path, personal_web_path):
     r[A3_Field.SEX]["Hombre"] = "Man"
 
     r[A3_Field.COUNTRY] = {}
-    countries = build_countries_translator(countries_path)
+    countries = build_translator(countries_path)
     for key in countries.keys():
         r[A3_Field.COUNTRY][key] = countries[key]
 
     r[A3_Field.JOB_DESCRIPTION] = {}
-    jobs = build_jobs_translator(jobs_path)
+    jobs = build_translator(jobs_path)
     for key in jobs.keys():
         r[A3_Field.JOB_DESCRIPTION][key] = jobs[key]
 
-    # in progress
-    DEFAULT_WEB = "https://www.iciq.org"
     r[A3_Field.PERSONAL_WEB] = {}
-    personal_webs = build_jobs_translator(personal_web_path)
+    personal_webs = build_translator(personal_web_path, 1)
     for key in personal_webs.keys():
-        r[A3_Field.PERSONAL_WEB][key] = personal_webs[key] or DEFAULT_WEB
+        r[A3_Field.PERSONAL_WEB][key] = personal_webs[key]
     return r
 
 
@@ -342,6 +321,20 @@ def upload_excel(excel_path):
     logger.info('Closed connection.')
 
 
+def has_changed_jobs(researcher_a3, researcher_imarina, translator):
+    pass
+
+def is_visitor(researcher_a3: Researcher) -> bool:
+    """
+    Esta información la da el código centro (4 para visitantes). Pero sí que se cargan los ICREA también con código 4,
+    y los predocs con becas CSC que también llevan código 4. Para determinar si una persona con código 4 es visitante
+     hay tener en cuenta las fechas de inicio y fin que están en las columnas del final de la tabla (menos de un a.
+    """
+
+    pass
+
+
+
 def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarina_path, a3_path,):
     logger = setup_logger("Excel build", "./logs/log.log", level=logging.DEBUG)
 
@@ -354,18 +347,12 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
     # Get iMarina last upload data
     im_data = pd.read_excel(imarina_path, header=0)
 
-
-
-
-
-
     output_data = im_data[0:0]  # retains columns, types, and headers if any
     empty_row_output_data = build_empty_row(imarina_dataframe=im_data)
 
     personal_web_path = "input/Personal_web.xlsx"
 
     translator = build_translations(countries_path, jobs_path, personal_web_path)
-
 
     # Phase 1: Check if the researchers in iMarina are still in A3
     not_present = 0
@@ -411,15 +398,22 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
         researcher_a3 = parse_a3_row_data(row, translator)
         researchers_matched_im = search_data(researcher_a3, im_data, parse_imarina_row_data, translator)
         empty_row = empty_row_output_data.copy()
+        if is_visitor(researcher_a3):
+            continue
         if len(researchers_matched_im) == 0:
             logger.info(f"Present in A3 but not on iMarina, is a new researcher to add to iMarina")
             unparse_researcher_to_imarina_row(researcher_a3, empty_row)
             output_data = pd.concat([output_data, empty_row], ignore_index=True)
         elif len(researchers_matched_im) == 1:
-            logger.info(f"Present in A3 and also on iMarina, we do not need to do anything because we added it on the "
-                        f"previous step")
-            pass
+            logger.info(f"Present in A3 and also on iMarina")
+            # Check difference between translation of job from A3 (researcher_a3) and the current job in
+            # iMarina
+            if has_changed_jobs(researcher_a3, researchers_matched_im, translator):
+                # Create new row in iMarina for new position
+                pass
+            # Implicitly if has not changed jobs do nothing
         elif len(researchers_matched_im) > 1:
+            # TODO: implement logic to handle job changes when more than one match
             logger.info(f"Present in A3 and also on iMarina, we do not need to do anything because we added it on the "
                         f"previous step. More than one match. Number: {str(len(researchers_matched_im))}")
 
