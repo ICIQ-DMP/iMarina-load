@@ -34,6 +34,7 @@ class Researcher:
         self.country = kwargs.get("country")
         self.born_country = kwargs.get("born_country")
         self.job_description = kwargs.get("job_description")
+        self.employee_code = kwargs.get("employee_code")
 
 
     def __str__(self):
