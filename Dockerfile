@@ -10,7 +10,8 @@ RUN mkdir -p /input
 WORKDIR /app
 
 # copy at the app
-COPY . /app
+COPY ./src /app/src
+COPY ./requirements.txt /app
 
 # install requirements
 RUN pip install --no-cache-dir -r requirements.txt

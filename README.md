@@ -19,8 +19,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="[https://github.com/github_username/repo_name](https://github.com/ICIQ-DMP/iMarina-load)">
-    <img src="images/logo-ICIQ-horizontal-catalan.png" alt="Logo" width="all" height="all">
+  <a href="[https://github.com/ICIQ-DMP/iMarina-load](https://github.com/ICIQ-DMP/iMarina-load)">
+    <img src="https://raw.githubusercontent.com/ICIQ-DMP/ICIQ-DMP.github.io/refs/heads/master/assets/images/logo-ICIQ-horizontal-catalan.png" alt="Logo" width="all" height="all">
   </a>
 
 <h3 align="center">iMarina-load</h3>
@@ -138,9 +138,13 @@ pip install -r requirements.txt
 ## Usage
 To start the program execute this command
 ```shell
-./venv/bin/python src/main.py -- step build
-
+./venv/bin/python src/main.py --step build
 ```
+
+sudo docker build . -t aleixmt/imarina-load --progress=plain
+
+
+
 
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
@@ -167,26 +171,15 @@ If you’d like to report a bug, request a feature, or propose an improvement, p
 
 **Creating an Issue**
 
-1.Go to the Issues tab
-Navigate to the Issues section of the repository.
+Create a new Issue [in here](https://github.com/ICIQ-DMP/iMarina-load/issues/new).
 
-2.Click on “New Issue”
-Press the New Issue button to start creating one.
+* Title: A short, descriptive summary of the issue.
+* Description: Provide as much context as possible.
+* For bugs: steps to reproduce, expected vs. actual behavior, environment (OS, Python version, etc.).
+* For features: explain the motivation and the expected outcome.
+* Screenshots or logs (if applicable).
 
-3.Fill in the details
-
-Title: A short, descriptive summary of the issue.
-
-Description: Provide as much context as possible.
-
-For bugs: steps to reproduce, expected vs. actual behavior, environment (OS, Python version, etc.).
-
-For features: explain the motivation and the expected outcome.
-
-Screenshots or logs (if applicable).
-
-4.Publish the issue
-Once completed, click Submit new issue. The maintainers will review it and may ask for further clarification.
+The maintainers will review it and may ask for further clarification.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -213,9 +206,8 @@ Distributed under the GNU GPL v3. See [LICENSE](https://github.com/ICIQ-DMP/iMar
 <!-- CONTACT -->
 ## Contact
 
-Mario Piqué - (mpique@iciq.es) [mpique@iciq.es]
-
-Aleix Mariné - (amarine@iciq.es) [amarine@iciq.es]
+* Mario Piqué - [mpique@iciq.es](mpique@iciq.es)
+* Aleix Mariné - [amarine@iciq.es](amarine@iciq.es)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -241,8 +233,6 @@ Aleix Mariné - (amarine@iciq.es) [amarine@iciq.es]
 
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white
 [linkedin-url]: https://es.linkedin.com/company/iciq
-
-[product-screenshot]: images/screenshot.png
 
 [Python]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
 [Python-url]: https://www.python.org/
