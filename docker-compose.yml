@@ -4,7 +4,8 @@ services:
     build: .
     container_name: iMarina_docker
     volumes:
-    - ./input:/app/input  # TODO mount volume for output
+    - ./input:/app/input
+    - ./input:/app/output
     stdin_open: true
     tty: true
     command: >
