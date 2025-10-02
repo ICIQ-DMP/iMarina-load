@@ -323,6 +323,8 @@ def upload_excel(excel_path):
 
 
 def has_changed_jobs(researcher_a3, researcher_imarina, translator):
+
+
     pass
 
 def is_visitor(researcher_a3: Researcher) -> bool:
