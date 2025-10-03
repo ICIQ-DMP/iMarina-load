@@ -154,7 +154,7 @@ def parse_imarina_row_data(row, translator):
 
 def parse_a3_row_data(row, translator):
 
-    print(row.values[A3_Field.BORN_COUNTRY.value])
+
     default_web = "https://www.iciq.org"
     data = Researcher(dni=row.values[A3_Field.DNI.value], email=row.values[A3_Field.EMAIL.value],
                       orcid=row.values[A3_Field.ORCID.value],
