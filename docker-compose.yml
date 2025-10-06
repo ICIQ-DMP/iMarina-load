@@ -6,6 +6,11 @@ services:
     volumes:
     - ./input:/app/input
     - ./input:/app/output
+    - ./secrets/FTP_HOST.txt:/run/secrets/FTP_HOST:ro
+    - ./secrets/FTP_PASSWORD.txt:/run/secrets/FTP_PASSWORD:ro
+    - ./secrets/FTP_PORT.txt:/run/secrets/FTP_PORT:ro
+    - ./secrets/FTP_USER.txt:/run/secrets/FTP_USER:ro
+
     stdin_open: true
     tty: true
     command: >
