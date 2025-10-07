@@ -353,6 +353,7 @@ def is_visitor(researcher_a3: Researcher,) -> bool:
 
 
 
+
 def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarina_path, a3_path,):
     logger = setup_logger("Excel build", "./logs/log.log", level=logging.DEBUG)
 
