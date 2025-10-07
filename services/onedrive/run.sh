@@ -14,7 +14,8 @@ mkdir -p "${SCRIPT_DIR}/data"
 mkdir -p "${SCRIPT_DIR}/logs"
 
 echo "*
-!.gitignore" > "${SCRIPT_DIR}/conf/.gitignore"
+!.gitignore
+!config" > "${SCRIPT_DIR}/conf/.gitignore"
 
 echo "*
 !.gitignore" > "${SCRIPT_DIR}/data/.gitignore"
