@@ -135,14 +135,48 @@ pip install -r requirements.txt
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+
 ## Usage
-To start the program execute this command
+### Obtaining translations
+First you will need to obtain the spreadsheets with the translations. By default, they are read from the `input/` 
+folder, but 
+you can change the location of these expected files with the following arguments:
+* `--imarina-input /path/to/iMarina.xlsx`
+* `--a3-input /path/to/A3.xlsx`
+* `--countries-dict /path/to/countries.xlsx`
+* `--jobs-dict /app/input/Job_Descriptions.xlsx`
+
+You can either download them manually from Sharepoint, or you can use the Dockerized OneDrive service to sync files 
+from Sharepoint to your host computer automatically in the background.
+
+To do so you should do the following:
+```shell
+cd services/onedrive
+bash run.sh
+# The program will display a link and ask you to authenticate and paste the answered URL into the terminal
+```
+
+After following the steps, OneDrive will be syncing the folder 
+`Institutional Strengthening/_Projects/iMarina_load_automation/input` from Sharepoint into `services/onedrive/data`. Add 
+or change the necessary arguments to read from this new source, instead of `input/`, so that data consumed by the 
+program is always updated. 
+
+You can leave OneDrive running so that the files are always in sync. 
+
+There are two configuration options active in `services/onedrive/conf/config` to make OneDrive delete things that have 
+been deleted in Sharepoint `cleanup_local_files = "true"` and to only do downloads, not uploads (one-way sync) 
+`download_only = "true"`. You may remove these two options to change the behaviour from one-way sync to two-way sync. 
+
+
+
+### Executing program
+To start the program execute this command:
 ```shell
 ./venv/bin/python src/main.py --step build
 ```
 
+<!-- TODO: Mario, no format, no fun... -->
 sudo docker build . -t aleixmt/imarina-load --progress=plain
-
 
 
 
