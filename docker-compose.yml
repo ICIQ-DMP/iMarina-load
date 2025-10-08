@@ -5,20 +5,27 @@ services:
     container_name: iMarina_docker
     volumes:
     - ./input:/app/input
-    - ./input:/app/output
-    - ./secrets/FTP_HOST.txt:/run/secrets/FTP_HOST:ro
-    - ./secrets/FTP_PASSWORD.txt:/run/secrets/FTP_PASSWORD:ro
-    - ./secrets/FTP_PORT.txt:/run/secrets/FTP_PORT:ro
-    - ./secrets/FTP_USER.txt:/run/secrets/FTP_USER:ro
-    environment:
-      MODE: build
-      FTP_HOST_FILE: /run/secrets/FTP_HOST
-      FTP_PASSWORD_FILE: /run/secrets/FTP_PASSWORD
-      FTP_PORT_FILE: /run/secrets/FTP_PORT
-      FTP_USER_FILE: /run/secrets/FTP_USER
+    - ./output:/app/output
+    - ./uploads:/app/uploads
+
+    secrets:
+      - FTP_HOST
+      - FTP_PASSWORD
+      - FTP_PORT
+      - FTP_USER
     stdin_open: true
     tty: true
     command: >
-      sh -c "python /app/src/main.py --imarina-input /app/input/iMarina.xlsx --a3-input /app/input/A3.xlsx --countries-dict /app/input/countries.xlsx --jobs-dict /app/input/Job_Descriptions.xlsx"
-        
+      sh -c "python /app/src/main.py --imarina-input /app/input/iMarina.xlsx --a3-input /app/input/A3.xlsx --countries-dict /app/input/countries.xlsx --jobs-dict /app/input/Job_Descriptions.xlsx --step build"
+
+secrets:
+  FTP_HOST:
+    file: ./secrets/FTP_HOST
+  FTP_PASSWORD:
+    file: ./secrets/FTP_PASSWORD
+  FTP_PORT:
+    file: ./secrets/FTP_PORT
+  FTP_USER:
+    file: ./secrets/FTP_USER
+
 
