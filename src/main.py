@@ -1,9 +1,14 @@
-import datetime
+
 import logging
 import shutil
 
 import pandas as pd
+
 from datetime import date
+import datetime
+
+
+
 import os
 from enum import Enum
 
@@ -35,6 +40,7 @@ class Researcher:
         self.born_country = kwargs.get("born_country")
         self.job_description = kwargs.get("job_description")
         self.employee_code = kwargs.get("employee_code")
+        self.code_center = kwargs.get("code_center")
 
 
     def __str__(self):
@@ -55,10 +61,12 @@ class Researcher:
             f"  Country: {self.country}\n"
             f"  Born country: {self.born_country}\n"
             f"  Job description: {self.job_description}\n"
+            f"  Code center: {self.code_center}\n"
         )
 
     def copy(self):
         return Researcher(
+            code_center=self.code_center,
             dni=self.dni,
             email=self.email,
             name=self.name,
@@ -78,6 +86,7 @@ class Researcher:
 
 
 class A3_Field(Enum):
+    CODE_CENTER = 1
     NAME = 2
     SURNAME = 3
     SECOND_SURNAME = 4
@@ -153,8 +162,11 @@ def parse_imarina_row_data(row, translator):
 
 
 def parse_a3_row_data(row, translator):
+
+
     default_web = "https://www.iciq.org"
-    data = Researcher(dni=row.values[A3_Field.DNI.value], email=row.values[A3_Field.EMAIL.value],
+    data = Researcher(code_center=row.values[A3_Field.CODE_CENTER.value],
+                      dni=row.values[A3_Field.DNI.value], email=row.values[A3_Field.EMAIL.value],
                       orcid=row.values[A3_Field.ORCID.value],
                       name=row.values[A3_Field.NAME.value],
                       surname=row.values[A3_Field.SURNAME.value],
@@ -324,17 +336,21 @@ def upload_excel(excel_path):
 
 def has_changed_jobs(researcher_a3, researcher_imarina, translator):
 
-
     pass
 
-def is_visitor(researcher_a3: Researcher) -> bool:
-    """
-    Esta información la da el código centro (4 para visitantes). Pero sí que se cargan los ICREA también con código 4,
-    y los predocs con becas CSC que también llevan código 4. Para determinar si una persona con código 4 es visitante
-     hay tener en cuenta las fechas de inicio y fin que están en las columnas del final de la tabla (menos de un a.
-    """
+def is_visitor(researcher_a3: Researcher,) -> bool:
 
-    pass
+  if researcher_a3.code_center == 4:
+      start = researcher_a3.ini_date
+      end = researcher_a3.end_date
+      if start is None:
+          return False
+      if end is None:
+         end = datetime.datetime.today()
+      duration = (end - start).days
+      return duration < 365
+  return False
+
 
 
 
@@ -401,6 +417,10 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
         researcher_a3 = parse_a3_row_data(row, translator)
         researchers_matched_im = search_data(researcher_a3, im_data, parse_imarina_row_data, translator)
         empty_row = empty_row_output_data.copy()
+
+        print(f"{researcher_a3.name}: code_center={researcher_a3.code_center}, ini_date={researcher_a3.ini_date}, end_date={researcher_a3.end_date}")
+        print(f"Visitante: {is_visitor(researcher_a3)}")
+
         if is_visitor(researcher_a3):
             continue
         if len(researchers_matched_im) == 0:
