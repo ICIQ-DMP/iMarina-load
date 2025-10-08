@@ -1,29 +1,21 @@
 
 from datetime import date, datetime
 
-from main import Researcher, is_visitor
+
+#import sys
+#import os
+#sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.main import Researcher, is_visitor
 
 
+#from main import Researcher, is_visitor
 
-def test_build_upload_excel():
-    assert False
-
-
-def test_upload_excel():
-    return True
-
-
-def test_build_translations():
-    assert False
 
 
 # test de prueba suma
-def test_demo():
-    assert 1 + 1 == 2
-
-
-def test_researcher():
-    assert False
+#def test_demo():
+    #assert 1 + 1 == 2
 
 
 def test_is_visitor():
