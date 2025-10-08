@@ -175,9 +175,9 @@ To start the program execute this command:
 ./venv/bin/python src/main.py --step build
 ```
 
-<!-- TODO: Mario, no format, no fun... -->
+```
 sudo docker build . -t aleixmt/imarina-load --progress=plain
-
+``
 
 
 <!-- ROADMAP for issues -->
