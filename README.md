@@ -180,18 +180,113 @@ sudo docker build . -t aleixmt/imarina-load --progress=plain
 ```
 
 
+## Unit Testing by Pytest
+
+### Prerequisites
+Install the pytest library for use to create and
+run the tests.
+```shell
+pip install pytest
+```
+
+Creating tests:
+Test functions are written that begin with test_ in files with the same
+name.
 
 
+Folder test for example test_main.py
+All the tests we perform must be stored in this folder called tests.
+And the tests folder must be located in the root directory Desktop/iMarina-load.
+
+In the file called test_main.py, you must first import the classes needed for the test
+For example:
+
+```python
+from datetime import date, datetime
+
+from src.main import Researcher, is_visitor
+```
+
+The necessary classes are imported and, above all, the src.main is
+important.
+Our main is in the src folder.
+
+
+## Usage Pytest
+
+To use the library correctly and find our tests, we must create the following file and place it in the same root directory as Desktop/iMarina-load.
+
+Create the pytest.ini file
+
+With the following content
+
+``` ini
+[pytest]
+pythonpath = .
+```
+
+Pytest uses the pytest.ini file to define global settings.
+The option pythonpath = .
+tells pytest to add the project root folder (.) to PYTHONPATH.
+This allows Python to find the modules inside src/ without errors.
+
+The test file must be in the project root (same folder as src/ and tests/).
+
+Once this entire process is complete, we save it.
+
+
+### Executing pytest
+
+We have to be at the root of the project, otherwise we will get an error
+```shell
+cd ~/Desktop/iMarina-load
+```
+
+To ensure that Python sees the project root, you can manually add it to PYTHONPATH
+Run this command:
+
+```shell
+export PYTHONPATH=$PYTHONPATH:/home/your_usersystem/Desktop/iMarina-load
+```
+
+This adds the project path to Python's module “search path.”
+
+
+### Automation testing
+In one command can perform unit testing
+
+Run all the tests at the same time
+
+```shell
+
+pytest -v
+
+```
+
+Display prints or logs during tests
+
+```shell
+pytest -s -v
+```
+
+Stop at the first fail in the test
+```shell
+pytest -x
+
+```
+
+Run specific tests for example (by name) 
+
+```shell
+
+pytest -k "name"
+
+```
 
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
 
-- [x] [#1: Implement awesome README template](https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
-- [x] [#2: Finish arguments for flexible location of paths](https://github.com/ICIQ-DMP/iMarina-load/issues/2)
 - [ ] [#3: Find out equivalence of job description for personal web](https://github.com/ICIQ-DMP/iMarina-load/issues/3)
-- [x] [#4:Configure IP connection over imarina](https://github.com/ICIQ-DMP/iMarina-load/issues/4)
-- [ ] [#5:DOCKER ENVIRONMENT DEVELOPMENT in process](https://github.com/ICIQ-DMP/iMarina-load/issues/5)
-- [ ] [#6:Remove spurious value "nan" from countries.xlsx](https://github.com/ICIQ-DMP/iMarina-load/issues/6)
       
 
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load/issues) for a full list of proposed features (and known issues).
