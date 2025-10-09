@@ -334,9 +334,14 @@ def upload_excel(excel_path):
     logger.info('Closed connection.')
 
 
-def has_changed_jobs(researcher_a3, researcher_imarina, translator):
+def has_changed_jobs(researcher_a3, researcher_imarina, translator) -> bool:
 
-    pass
+      #if researcher_a3.end_date("end_date"):
+     #return True
+
+       #job_description = researcher_a3
+   pass
+
 
 def is_visitor(researcher_a3: Researcher,) -> bool:
 
@@ -432,8 +437,12 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
             # Check difference between translation of job from A3 (researcher_a3) and the current job in
             # iMarina
             if has_changed_jobs(researcher_a3, researchers_matched_im, translator):
-                # Create new row in iMarina for new position
-                pass
+             # Create new row in iMarina for new position
+               pass
+
+
+
+
             # Implicitly if has not changed jobs do nothing
         elif len(researchers_matched_im) > 1:
             # TODO: implement logic to handle job changes when more than one match

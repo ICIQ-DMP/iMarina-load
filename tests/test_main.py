@@ -1,21 +1,14 @@
 
 from datetime import date, datetime
 
-
-#import sys
-#import os
-#sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from src.main import Researcher, is_visitor
 
-
-#from main import Researcher, is_visitor
 
 
 
 # test de prueba suma
-#def test_demo():
-    #assert 1 + 1 == 2
+def test_demo():
+    assert 1 + 1 == 2
 
 
 def test_is_visitor():
