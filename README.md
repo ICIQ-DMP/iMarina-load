@@ -182,7 +182,7 @@ sudo docker build . -t aleixmt/imarina-load --progress=plain
 
 
 
-## Unit Testing by Pytest
+# Unit Testing by Pytest
 
 ### Prerequisites
 Install the pytest library for use to create and
@@ -191,7 +191,7 @@ run the tests.
 pip install pytest
 ```
 
-# Creating tests
+## Creating tests
 Test functions are written that begin with `test_`  in files with the same
 name.
 
