@@ -191,14 +191,18 @@ run the tests.
 pip install pytest
 ```
 
-Creating tests:
-Test functions are written that begin with test_ in files with the same
+# Creating tests
+Test functions are written that begin with `test_`  in files with the same
 name.
 
-
+## Test Folder
 Folder test for example test_main.py
+
 All the tests we perform must be stored in this folder called tests.
-And the tests folder must be located in the root directory Desktop/iMarina-load.
+
+### Folder Location
+And the tests folder must be located in the **root directory** of your project:
+Desktop/iMarina-load/tests.
 
 In the file called test_main.py, you must first import the classes needed for the test
 For example:
