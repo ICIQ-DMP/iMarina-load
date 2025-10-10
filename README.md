@@ -180,8 +180,6 @@ sudo docker build . -t aleixmt/imarina-load --progress=plain
 ```
 
 
-
-
 # Unit Testing by Pytest
 
 ### Prerequisites
@@ -288,6 +286,12 @@ Run specific tests for example (by name)
 pytest -k "name"
 
 ```
+
+
+### More Usage info
+
+[ICIQ-DMP](https://iciq-dmp.github.io/_posts/iMarina/2025-07-07-iMarina-load.html)
+
 
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
