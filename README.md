@@ -297,7 +297,7 @@ First create a Dockerfile and named (for example)
 # image base python
 FROM python:3.12-alpine3.20
 
-LABEL authors="mpique"
+LABEL authors="yourname"
 
 RUN mkdir -p /input
 
