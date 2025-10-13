@@ -287,6 +287,64 @@ pytest -k "name"
 
 ```
 
+# DOCKER PYTEST
+
+First create a Dockerfile and named (for example)
+## test.Dockerfile
+
+```dockerfile
+
+# image base python
+FROM python:3.12-alpine3.20
+
+LABEL authors="yourname"
+
+RUN mkdir -p /input
+
+# work directory in the container
+WORKDIR /app
+
+# copy at the app
+COPY ./src /app/src
+COPY ./tests /app/tests
+COPY ./requirements.txt /app
+
+# install requirements
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ./pytest.ini /app
+
+
+ENV PYTHONPATH=/app
+
+# script python
+CMD ["pytest", "-v"]
+
+```
+
+And a compose:
+## test-compose.yml
+
+```yaml
+services:
+  app:
+    build:
+      context: .
+      dockerfile: test.Dockerfile
+    container_name: iMarina_test
+    volumes:
+    - ./input:/app/input
+    - ./output:/app/output
+    - ./uploads:/app/uploads
+```
+
+Run this command for execute all tests in a Docker
+
+```shell
+docker compose -f test-compose.yml up --build
+
+```
+
 
 ### More Usage info in:
 
