@@ -289,9 +289,7 @@ pytest -k "name"
 
 # DOCKER PYTEST
 
-First create a Dockerfile
-
-Named:  
+First create a Dockerfile and named (for example)
 ## test.Dockerfile
 
 ```dockerfile
