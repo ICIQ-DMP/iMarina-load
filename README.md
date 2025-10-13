@@ -355,7 +355,7 @@ docker compose -f test-compose.yml up --build
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
 
-- [ ] [#3: Find out equivalence of job description for personal web](https://github.com/ICIQ-DMP/iMarina-load/issues/3)
+- [ ] [#8: Change position of jobs description A3 if have changed position of job](https://github.com/ICIQ-DMP/iMarina-load/issues/8)
       
 
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load/issues) for a full list of proposed features (and known issues).
