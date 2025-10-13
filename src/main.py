@@ -433,7 +433,12 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
             # iMarina
             if has_changed_jobs(researcher_a3, researchers_matched_im, translator):
                 # Create new row in iMarina for new position
-                pass
+                new_row = researcher_a3.copy()
+                new_row["source"] = "A3"
+                new_row["status"] = "new_position"
+
+                imarina_df = pd.concat([imarina_df, pd.DataFrame([new_row])], ignore_index=True)
+
             # Implicitly if has not changed jobs do nothing
         elif len(researchers_matched_im) > 1:
             # TODO: implement logic to handle job changes when more than one match
