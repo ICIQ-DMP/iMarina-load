@@ -13,6 +13,7 @@ import os
 from enum import Enum
 
 import paramiko
+from numpy.ma.core import equal
 from pycparser.ply.yacc import resultlimit
 
 from log import setup_logger
@@ -214,7 +215,6 @@ def unparse_researcher_to_imarina_row(data: Researcher, empty_output_row):
 
 
 
-
 def parse_two_columns(df, key: int, value: int, func_apply_key=None, func_apply_value=None):
     val_col = df[value]
     key_col = df[key]
@@ -334,9 +334,18 @@ def upload_excel(excel_path):
     logger.info('Closed connection.')
 
 
-def has_changed_jobs(researcher_a3, researcher_imarina, translator):
+def has_changed_jobs( researcher_a3, researcher_imarina, translator):
 
-    pass
+    a3_job = translator.get(researcher_a3.job_description, researcher_a3.job_description)
+
+
+    if a3_job != researcher_imarina.job_description:
+        return True
+    return False
+
+
+
+
 
 def is_visitor(researcher_a3: Researcher,) -> bool:
 
@@ -431,13 +440,12 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
             logger.info(f"Present in A3 and also on iMarina")
             # Check difference between translation of job from A3 (researcher_a3) and the current job in
             # iMarina
-            if has_changed_jobs(researcher_a3, researchers_matched_im, translator):
-                # Create new row in iMarina for new position
-                new_row = researcher_a3.copy()
-                new_row["source"] = "A3"
-                new_row["status"] = "new_position"
+            ### new lines addes
+            im_match = researchers_matched_im[0]
+            if has_changed_jobs(researcher_a3, im_match, translator):
+                pass
 
-                imarina_df = pd.concat([imarina_df, pd.DataFrame([new_row])], ignore_index=True)
+
 
             # Implicitly if has not changed jobs do nothing
         elif len(researchers_matched_im) > 1:
