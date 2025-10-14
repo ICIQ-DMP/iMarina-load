@@ -26,7 +26,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: pytest -v
+        run: PYTHONPATH=$PYTHONPATH:/home/runner/work/iMarina-load/iMarina-load pytest -v
 
   build:
     runs-on: ubuntu-latest
