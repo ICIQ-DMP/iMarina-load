@@ -168,15 +168,92 @@ been deleted in Sharepoint `cleanup_local_files = "true"` and to only do downloa
 `download_only = "true"`. You may remove these two options to change the behaviour from one-way sync to two-way sync. 
 
 
-
 ### Executing program
 To start the program execute this command:
 ```shell
 ./venv/bin/python src/main.py --step build
 ```
 
+## Running the iMarina-load project using  Docker
+
+First step is create the `Dockerfile` and the `docker-compose.yml`
+
+`Dockerfile` Builds a lightweight Python 3.12 Alpine image that installs dependencies and 
+runs the main script with predefined input file paths.
+
+
+```dockerfile
+# image python
+FROM python:3.12-alpine3.20
+
+LABEL authors="yourname"
+
+RUN mkdir -p /input
+
+# work directory in the container
+WORKDIR /app
+
+# copy at the app
+COPY ./src /app/src
+COPY ./requirements.txt /app
+
+# install requirements
+RUN pip install --no-cache-dir -r requirements.txt
+
+# script python for main
+CMD ["python", "/app/src/main.py", "--imarina-input", "/input/iMarina.xlsx", "--a3-input", "/input/A3.xlsx", "--countries-dict", "/input/countries.xlsx", "--jobs-dict", "/input/Job_Descriptions.xlsx"]
+
 ```
-sudo docker build . -t aleixmt/imarina-load --progress=plain
+
+`docker-compose` Defines a service that builds and runs the iMarina-load container, mounts input/output folders, 
+and securely injects FTP credentials as secrets for automated data processing.
+
+```yaml
+
+services:
+  app:
+    image: yourname/imarina-load:latest
+    build: .
+    container_name: iMarina_docker
+    volumes:
+    - ./input:/app/input
+    - ./output:/app/output
+    - ./uploads:/app/uploads
+
+    secrets:
+      - FTP_HOST
+      - FTP_PASSWORD
+      - FTP_PORT
+      - FTP_USER
+    stdin_open: true
+    tty: true
+    command: >
+      sh -c "python /app/src/main.py --imarina-input /app/input/iMarina.xlsx --a3-input /app/input/A3.xlsx --countries-dict /app/input/countries.xlsx --jobs-dict /app/input/Job_Descriptions.xlsx --step build"
+
+secrets:
+  FTP_HOST:
+    file: ./secrets/FTP_HOST
+  FTP_PASSWORD:
+    file: ./secrets/FTP_PASSWORD
+  FTP_PORT:
+    file: ./secrets/FTP_PORT
+  FTP_USER:
+    file: ./secrets/FTP_USER
+```
+
+
+
+
+#### Useful commmands to run the container Docker
+
+- **Access the container shell**
+```shell
+  docker-compose run --rm app sh
+```
+
+- **Build the Docker image manually**
+```shell
+  sudo docker build . -t aleixmt/imarina-load --progress=plain
 ```
 
 
