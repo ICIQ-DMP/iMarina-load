@@ -362,7 +362,7 @@ pytest -k "name"
 
 ```
 
-# DOCKER PYTEST
+# DOCKER + PYTEST
 
 First create a Dockerfile and named (for example)
 ## test.Dockerfile
