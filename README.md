@@ -176,7 +176,8 @@ To start the program execute this command:
 
 ## Running the iMarina-load project using  Docker
 
-First step is create the `Dockerfile` and the `docker-compose.yml`
+Use the provided `Dockerfile` and `docker-compose.yml` to build and run the iMarina-load service in a containerized environment.  
+
 
 `Dockerfile` Builds a lightweight Python 3.12 Alpine image that installs dependencies and 
 runs the main script with predefined input file paths.
@@ -240,9 +241,6 @@ secrets:
   FTP_USER:
     file: ./secrets/FTP_USER
 ```
-
-
-
 
 #### Useful commmands to run the container Docker
 
