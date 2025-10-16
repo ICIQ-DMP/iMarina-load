@@ -362,7 +362,7 @@ pytest -k "name"
 
 ```
 
-# DOCKER + PYTEST
+# 🐳 Docker ➕ 🧪 Pytest
 
 First create a Dockerfile and named (for example)
 ## test.Dockerfile
@@ -416,12 +416,19 @@ services:
 Run this command for execute all tests in a Docker
 
 ```shell
-docker compose -f test-compose.yml up --build
+  docker compose -f test-compose.yml up --build
 
 ```
 
+## 🧪Test stage (Github actions)
+Our project uses Github actions (push)  .
+Automated tests run on every push using **GitHub Actions**.  
+The workflow installs dependencies, runs all pytest tests, and builds the Docker image only if all tests pass.
+The workflow is defined in `.github/workflows/docker.yml`
 
-### More Usage info in:
+
+
+### More Usage info of iMarina-load in:
 
 [ICIQ-DMP](https://iciq-dmp.github.io/_posts/iMarina/2025-07-07-iMarina-load.html)
 

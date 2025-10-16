@@ -24,3 +24,6 @@ ENV PYTHONPATH=/app
 # script python
 CMD ["pytest", "-v"]
 
+
+
+
