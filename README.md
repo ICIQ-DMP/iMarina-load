@@ -428,7 +428,7 @@ The workflow is defined in `.github/workflows/docker.yml`
 
 
 
-### More Usage info of iMarina-load in:
+### More of iMarina-load Usage info in:
 
 [ICIQ-DMP](https://iciq-dmp.github.io/_posts/iMarina/2025-07-07-iMarina-load.html)
 
