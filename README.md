@@ -101,7 +101,7 @@ Install the version python 3.12.3
 In my Ubuntu is:
 
 ```shell
-sudo apt install python3.12-venv gcc build-essential -y
+ sudo apt install python3.12-venv gcc build-essential -y
 ```
 
 ### Installation
