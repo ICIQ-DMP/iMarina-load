@@ -33,6 +33,9 @@ class Researcher:
         self.orcid = kwargs.get("orcid")
         self.ini_date = kwargs.get("ini_date")
         self.end_date = kwargs.get("end_date")
+        self.ini_prorrog = kwargs.get("ini_prorrog")
+        self.end_prorrog = kwargs.get("end_prorrog")
+        self.date_termination = kwargs.get("date_termination")
         self.sex = kwargs.get("sex")
         self.personal_web = kwargs.get("personal_web")
         self.signature = kwargs.get("signature")
@@ -55,6 +58,9 @@ class Researcher:
             f"  ORCID: {self.orcid}\n"
             f"  End Date: {self.end_date}\n"
             f"  Ini Date: {self.ini_date}\n"
+            f"  Ini Prorrog: {self.ini_prorrog}\n"
+            f"  End Prorrog: {self.end_prorrog}\n"
+            f"  Date Termination: {self.date_termination}\n"
             f"  Sex: {self.sex}\n"
             f"  Personal web: {self.personal_web}\n"
             f"  Signature: {self.signature}\n"
@@ -76,6 +82,9 @@ class Researcher:
             orcid=self.orcid,
             ini_date=self.ini_date,
             end_date=self.end_date,
+            ini_prorrog=self.ini_prorrog,
+            end_prorrog=self.end_prorrog,
+            date_termination=self.date_termination,
             sex=self.sex,
             personal_web=self.personal_web,
             signature=self.signature,
@@ -100,6 +109,9 @@ class A3_Field(Enum):
     ORCID = 13
     INI_DATE = 14
     END_DATE = 15
+    INI_PRORROG = 16
+    END_PRORROG = 17
+    DATE_TERMINATION = 18
     PERSONAL_WEB = -1
     SIGNATURE = -1
     SIGNATURE_CUSTOM = -1
@@ -174,6 +186,9 @@ def parse_a3_row_data(row, translator):
                       second_surname=row.values[A3_Field.SECOND_SURNAME.value],
                       ini_date=sanitize_date(row.values[A3_Field.INI_DATE.value]),
                       end_date=sanitize_date(row.values[A3_Field.END_DATE.value]),
+                      ini_prorrog=sanitize_date(row.values[A3_Field.INI_PRORROG.value]),
+                      end_prorrog=sanitize_date(row.values[A3_Field.END_PRORROG.value]),
+                      date_termination=sanitize_date(row.values[A3_Field.DATE_TERMINATION.value]),
                       sex=row.values[A3_Field.SEX.value],
                       personal_web=translator[A3_Field.PERSONAL_WEB].get(
                           row.values[A3_Field.JOB_DESCRIPTION.value], default_web
@@ -356,9 +371,11 @@ def has_changed_jobs( researcher_a3, researcher_imarina, translator):
             f"  iMarina: inicio={researcher_imarina.ini_date}, fin={researcher_imarina.end_date}"
         )
         return True
+    else:
+
 
     # si es igual tanto puesto(job_description) como fechas(ini_date & end_date) y no ha cambiado muestra por consola esto:
-    print("[SIN CAMBIO] El puesto y las fechas son iguales y no han cambiado.")
+        print("[SIN CAMBIO] El puesto y las fechas son iguales y no han cambiado.")
     return False
 
 
@@ -432,7 +449,7 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
                     # If it has not changed, add current iMarina row to output as is.
                     # (end date not present) it is a contract that could be still ongoing continue
                     new_row = empty_row_output_data.copy()
-                    unparse_researcher_to_imarina_row(researcher_imarina, new_row)
+                    unparse_researcher_to_imarina_row(researcher_a3, new_row)
                     output_data = pd.concat([output_data, new_row], ignore_index=True)
                     print(f"[INFO] {researcher_a3.name}: sin cambio, se mantiene igual")
                 continue
@@ -474,6 +491,15 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
     # with CSC, so its data from A3 needs to be added to the output.
     output_data.to_excel(output_path, index=False)
 
+# new function TODO
+#def upload_file_sharepoint(file_path: Path):
+    """
+    Uploads a file to Sharepoint Institutional Strengthening
+    """
+
+
+    #pass
+
 
 def main():
     logger = setup_logger("Main process", "./logs/log.log", level=logging.DEBUG)
@@ -495,6 +521,7 @@ def main():
 
     # Phase 3: Upload file to iMarina and make backup
     shutil.move(output_path, os.path.join(root_dir, "uploads", excel_name))
+    #upload_file_sharepoint(os.path.join(root_dir, "uploads", excel_name)) #de momento silenciada hasta que termine lo cambio de posicion
 
 
 if __name__ == "__main__":
