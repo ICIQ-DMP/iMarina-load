@@ -101,7 +101,7 @@ Install the version python 3.12.3
 In my Ubuntu is:
 
 ```shell
-sudo apt install python3.12-venv gcc build-essential -y
+ sudo apt install python3.12-venv gcc build-essential -y
 ```
 
 ### Installation
@@ -168,29 +168,276 @@ been deleted in Sharepoint `cleanup_local_files = "true"` and to only do downloa
 `download_only = "true"`. You may remove these two options to change the behaviour from one-way sync to two-way sync. 
 
 
-
 ### Executing program
 To start the program execute this command:
 ```shell
 ./venv/bin/python src/main.py --step build
 ```
 
-```
-sudo docker build . -t aleixmt/imarina-load --progress=plain
+## Running the iMarina-load project using  Docker
+
+Use the provided `Dockerfile` and `docker-compose.yml` to build and run the iMarina-load service in a containerized environment.  
+
+
+`Dockerfile` Builds a lightweight Python 3.12 Alpine image that installs dependencies and 
+runs the main script with predefined input file paths.
+
+
+```dockerfile
+# image python
+FROM python:3.12-alpine3.20
+
+LABEL authors="yourname"
+
+RUN mkdir -p /input
+
+# work directory in the container
+WORKDIR /app
+
+# copy at the app
+COPY ./src /app/src
+COPY ./requirements.txt /app
+
+# install requirements
+RUN pip install --no-cache-dir -r requirements.txt
+
+# script python for main
+CMD ["python", "/app/src/main.py", "--imarina-input", "/input/iMarina.xlsx", "--a3-input", "/input/A3.xlsx", "--countries-dict", "/input/countries.xlsx", "--jobs-dict", "/input/Job_Descriptions.xlsx"]
+
 ```
 
+`docker-compose` Defines a service that builds and runs the iMarina-load container, mounts input/output folders, 
+and securely injects FTP credentials as secrets for automated data processing.
+
+```yaml
+
+services:
+  app:
+    image: yourname/imarina-load:latest
+    build: .
+    container_name: iMarina_docker
+    volumes:
+    - ./input:/app/input
+    - ./output:/app/output
+    - ./uploads:/app/uploads
+
+    secrets:
+      - FTP_HOST
+      - FTP_PASSWORD
+      - FTP_PORT
+      - FTP_USER
+    stdin_open: true
+    tty: true
+    command: >
+      sh -c "python /app/src/main.py --imarina-input /app/input/iMarina.xlsx --a3-input /app/input/A3.xlsx --countries-dict /app/input/countries.xlsx --jobs-dict /app/input/Job_Descriptions.xlsx --step build"
+
+secrets:
+  FTP_HOST:
+    file: ./secrets/FTP_HOST
+  FTP_PASSWORD:
+    file: ./secrets/FTP_PASSWORD
+  FTP_PORT:
+    file: ./secrets/FTP_PORT
+  FTP_USER:
+    file: ./secrets/FTP_USER
+```
+
+#### Useful commmands to run the container Docker
+
+- **Access the container shell**
+```shell
+  docker-compose run --rm app sh
+```
+
+- **Build the Docker image manually**
+```shell
+  sudo docker build . -t aleixmt/imarina-load --progress=plain
+```
+
+
+# Unit Testing by Pytest
+
+### Prerequisites
+Install the pytest library for use to create and
+run the tests.
+```shell
+pip install pytest
+```
+
+## Creating tests
+Test functions are written that begin with `test_`  in files with the same
+name.
+
+## Test Folder
+Folder test for example test_main.py
+
+All the tests we perform must be stored in this folder called tests.
+
+### Folder Location
+And the tests folder must be located in the **root directory** of your project:
+Desktop/iMarina-load/tests.
+
+In the file called test_main.py, you must first import the classes needed for the test
+For example:
+
+```python
+from datetime import date, datetime
+
+from src.main import Researcher, is_visitor
+```
+
+The necessary classes are imported and, above all, the src.main is
+important.
+Our main is in the src folder.
+
+
+## Usage Pytest
+
+To use the library correctly and find our tests, we must create the following file and place it in the same root directory as Desktop/iMarina-load.
+
+Create the pytest.ini file
+
+With the following content
+
+``` ini
+[pytest]
+pythonpath = .
+```
+
+Pytest uses the pytest.ini file to define global settings.
+The option pythonpath = .
+tells pytest to add the project root folder (.) to PYTHONPATH.
+This allows Python to find the modules inside src/ without errors.
+
+The test file must be in the project root (same folder as src/ and tests/).
+
+Once this entire process is complete, we save it.
+
+
+### Executing pytest
+
+We have to be at the root of the project, otherwise we will get an error
+```shell
+cd ~/Desktop/iMarina-load
+```
+
+To ensure that Python sees the project root, you can manually add it to PYTHONPATH
+Run this command:
+
+```shell
+export PYTHONPATH=$PYTHONPATH:/home/your_usersystem/Desktop/iMarina-load
+```
+
+This adds the project path to Python's module “search path.”
+
+
+### Automation testing
+In one command can perform unit testing
+
+Run all the tests at the same time
+
+```shell
+
+pytest -v
+
+```
+
+Display prints or logs during tests
+
+```shell
+pytest -s -v
+```
+
+Stop at the first fail in the test
+```shell
+pytest -x
+
+```
+
+Run specific tests for example (by name) 
+
+```shell
+
+pytest -k "name"
+
+```
+
+# 🐳 Docker ➕ 🧪 Pytest
+
+First create a Dockerfile and named (for example)
+## test.Dockerfile
+
+```dockerfile
+
+# image base python
+FROM python:3.12-alpine3.20
+
+LABEL authors="yourname"
+
+RUN mkdir -p /input
+
+# work directory in the container
+WORKDIR /app
+
+# copy at the app
+COPY ./src /app/src
+COPY ./tests /app/tests
+COPY ./requirements.txt /app
+
+# install requirements
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ./pytest.ini /app
+
+
+ENV PYTHONPATH=/app
+
+# script python
+CMD ["pytest", "-v"]
+
+```
+
+And a compose:
+## test-compose.yml
+
+```yaml
+services:
+  app:
+    build:
+      context: .
+      dockerfile: test.Dockerfile
+    container_name: iMarina_test
+    volumes:
+    - ./input:/app/input
+    - ./output:/app/output
+    - ./uploads:/app/uploads
+```
+
+Run this command for execute all tests in a Docker
+
+```shell
+  docker compose -f test-compose.yml up --build
+
+```
+
+## 🧪Test stage (Github actions)
+Our project uses Github actions (push)  .
+Automated tests run on every push using **GitHub Actions**.  
+The workflow installs dependencies, runs all pytest tests, and builds the Docker image only if all tests pass.
+The workflow is defined in `.github/workflows/docker.yml`
+
+
+
+### More of iMarina-load Usage info in:
+
+[ICIQ-DMP](https://iciq-dmp.github.io/_posts/iMarina/2025-07-07-iMarina-load.html)
 
 
 
 <!-- ROADMAP for issues -->
 ## Roadmap (issues)
 
-- [x] [#1: Implement awesome README template](https://github.com/ICIQ-DMP/iMarina-load/issues/1) 
-- [x] [#2: Finish arguments for flexible location of paths](https://github.com/ICIQ-DMP/iMarina-load/issues/2)
-- [ ] [#3: Find out equivalence of job description for personal web](https://github.com/ICIQ-DMP/iMarina-load/issues/3)
-- [x] [#4:Configure IP connection over imarina](https://github.com/ICIQ-DMP/iMarina-load/issues/4)
-- [ ] [#5:DOCKER ENVIRONMENT DEVELOPMENT in process](https://github.com/ICIQ-DMP/iMarina-load/issues/5)
-- [ ] [#6:Remove spurious value "nan" from countries.xlsx](https://github.com/ICIQ-DMP/iMarina-load/issues/6)
+- [ ] [#8: Change position of jobs description A3 if have changed position of job](https://github.com/ICIQ-DMP/iMarina-load/issues/8)
       
 
 See the [open issues](https://github.com/ICIQ-DMP/iMarina-load/issues) for a full list of proposed features (and known issues).

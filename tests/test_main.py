@@ -6,9 +6,13 @@ from src.main import Researcher, is_visitor
 
 
 
+
 # test de prueba suma
 def test_demo():
     assert 1 + 1 == 2
+
+
+
 
 
 def test_is_visitor():

@@ -13,6 +13,7 @@ import os
 from enum import Enum
 
 import paramiko
+from numpy.ma.core import equal
 from pycparser.ply.yacc import resultlimit
 
 from log import setup_logger
@@ -32,6 +33,9 @@ class Researcher:
         self.orcid = kwargs.get("orcid")
         self.ini_date = kwargs.get("ini_date")
         self.end_date = kwargs.get("end_date")
+        self.ini_prorrog = kwargs.get("ini_prorrog")
+        self.end_prorrog = kwargs.get("end_prorrog")
+        self.date_termination = kwargs.get("date_termination")
         self.sex = kwargs.get("sex")
         self.personal_web = kwargs.get("personal_web")
         self.signature = kwargs.get("signature")
@@ -54,6 +58,9 @@ class Researcher:
             f"  ORCID: {self.orcid}\n"
             f"  End Date: {self.end_date}\n"
             f"  Ini Date: {self.ini_date}\n"
+            f"  Ini Prorrog: {self.ini_prorrog}\n"
+            f"  End Prorrog: {self.end_prorrog}\n"
+            f"  Date Termination: {self.date_termination}\n"
             f"  Sex: {self.sex}\n"
             f"  Personal web: {self.personal_web}\n"
             f"  Signature: {self.signature}\n"
@@ -75,6 +82,9 @@ class Researcher:
             orcid=self.orcid,
             ini_date=self.ini_date,
             end_date=self.end_date,
+            ini_prorrog=self.ini_prorrog,
+            end_prorrog=self.end_prorrog,
+            date_termination=self.date_termination,
             sex=self.sex,
             personal_web=self.personal_web,
             signature=self.signature,
@@ -99,6 +109,9 @@ class A3_Field(Enum):
     ORCID = 13
     INI_DATE = 14
     END_DATE = 15
+    INI_PRORROG = 16
+    END_PRORROG = 17
+    DATE_TERMINATION = 18
     PERSONAL_WEB = -1
     SIGNATURE = -1
     SIGNATURE_CUSTOM = -1
@@ -173,6 +186,9 @@ def parse_a3_row_data(row, translator):
                       second_surname=row.values[A3_Field.SECOND_SURNAME.value],
                       ini_date=sanitize_date(row.values[A3_Field.INI_DATE.value]),
                       end_date=sanitize_date(row.values[A3_Field.END_DATE.value]),
+                      ini_prorrog=sanitize_date(row.values[A3_Field.INI_PRORROG.value]),
+                      end_prorrog=sanitize_date(row.values[A3_Field.END_PRORROG.value]),
+                      date_termination=sanitize_date(row.values[A3_Field.DATE_TERMINATION.value]),
                       sex=row.values[A3_Field.SEX.value],
                       personal_web=translator[A3_Field.PERSONAL_WEB].get(
                           row.values[A3_Field.JOB_DESCRIPTION.value], default_web
@@ -209,7 +225,6 @@ def unparse_researcher_to_imarina_row(data: Researcher, empty_output_row):
     empty_output_row.iat[0, IMarina_Field.SIGNATURE_CUSTOM.value] = data.signature_custom
     empty_output_row.iat[0, IMarina_Field.COUNTRY.value] = data.country
     empty_output_row.iat[0, IMarina_Field.JOB_DESCRIPTION.value] = data.job_description
-
 
 
 
@@ -334,13 +349,34 @@ def upload_excel(excel_path):
     logger.info('Closed connection.')
 
 
-def has_changed_jobs(researcher_a3, researcher_imarina, translator) -> bool:
+# in process
+def has_changed_jobs( researcher_a3, researcher_imarina, translator):
+    # translate the job_description from A3 (researcher_a3.job_description)
+    a3_job =  translator[A3_Field.JOB_DESCRIPTION].get(researcher_a3.job_description, researcher_a3.job_description)
 
-      #if researcher_a3.end_date("end_date"):
-     #return True
 
-       #job_description = researcher_a3
-   pass
+    # if job_description  is changed
+    if a3_job != researcher_imarina.job_description:
+        print(f"[CAMBIO] El puesto cambió de : '{a3_job}' a '{researcher_imarina.job_description}'")
+        return True
+
+    # if ini_date or end_date have changed & dates are diferents
+    if (researcher_a3.ini_date or researcher_a3.end_date) and (
+            researcher_a3.ini_date != researcher_imarina.ini_date or
+            researcher_a3.end_date != researcher_imarina.end_date
+    ):
+        print(
+            f"[CAMBIO] Fechas diferentes:\n"
+            f"  A3: inicio={researcher_a3.ini_date}, fin={researcher_a3.end_date}\n"
+            f"  iMarina: inicio={researcher_imarina.ini_date}, fin={researcher_imarina.end_date}"
+        )
+        return True
+    else:
+
+
+    # si es igual tanto puesto(job_description) como fechas(ini_date & end_date) y no ha cambiado muestra por consola esto:
+        print("[SIN CAMBIO] El puesto y las fechas son iguales y no han cambiado.")
+    return False
 
 
 def is_visitor(researcher_a3: Researcher,) -> bool:
@@ -357,8 +393,6 @@ def is_visitor(researcher_a3: Researcher,) -> bool:
   return False
 
 
-
-
 def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarina_path, a3_path,):
     logger = setup_logger("Excel build", "./logs/log.log", level=logging.DEBUG)
 
@@ -372,6 +406,7 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
     im_data = pd.read_excel(imarina_path, header=0)
 
     output_data = im_data[0:0]  # retains columns, types, and headers if any
+    added_researchers = set()
     empty_row_output_data = build_empty_row(imarina_dataframe=im_data)
 
     personal_web_path = "input/Personal_web.xlsx"
@@ -388,29 +423,38 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
         empty_row = empty_row_output_data.copy()
         if len(researchers_matched_a3) == 0:
             # The current researcher in last iMarina load is not present in A3 --> the researcher is no longer in ICIQ.
-            print(
-                "row data from " + str(
-                    researcher_imarina.name) + " is not present on search_data data. Adding to iMarina with "
-                                               "end of "
-                                               "contract date.")
+            if researcher_imarina.end_date is None:
+                researcher_imarina.end_date = today  # Use end time already in iMarina if present, if not, set to today
+            new_row = empty_row_output_data.copy()
+            unparse_researcher_to_imarina_row(researcher_imarina, new_row)
+            output_data = pd.concat([output_data, new_row], ignore_index=True)
             not_present += 1
 
-            # Use end time already in iMarina if present, if not, set to today
-            if researcher_imarina.end_date is None:
-                researcher_imarina.end_date = today
 
-            unparse_researcher_to_imarina_row(researcher_imarina, empty_row)
-            output_data = pd.concat([output_data, empty_row], ignore_index=True)
+
         elif len(researchers_matched_a3) == 1:
+            researcher_a3 = researchers_matched_a3[0]
             # The current researcher in iMarina is present in A3 --> Corresponds to a researcher still working in ICIQ
-            if researcher_imarina.end_date is None:  # iMarina row has end date?
-                # how to check position change.
-                # If end date not present check if a position change
-                # Add a new line
-                # with same data with the new position and dates to determine to output.
-                # If it has not changed, add current iMarina row to output as is.
-                # (end date not present) it is a contract that could be still ongoing
+            if researcher_imarina.end_date is None:
+                # if have changed add a new line
+                if has_changed_jobs(researcher_a3, researcher_imarina, translator):
+                    # El puesto cambió → añadir una nueva línea con los nuevos datos
+                    # If end date not present check if a position change Add a new line  with same data with the new position and dates to determine to output.
+                    new_row = empty_row_output_data.copy()
+                    unparse_researcher_to_imarina_row(researcher_a3, new_row)
+                    output_data = pd.concat([output_data, new_row], ignore_index=True)
+                    print(f"[INFO] {researcher_a3.name}: cambio detectado, fila nueva añadida")
+                else:
+                    # No cambió entonces mantener la fila actual
+                    # If it has not changed, add current iMarina row to output as is.
+                    # (end date not present) it is a contract that could be still ongoing continue
+                    new_row = empty_row_output_data.copy()
+                    unparse_researcher_to_imarina_row(researcher_a3, new_row)
+                    output_data = pd.concat([output_data, new_row], ignore_index=True)
+                    print(f"[INFO] {researcher_a3.name}: sin cambio, se mantiene igual")
                 continue
+
+
             # Contract has end date and is already present in ICIQ; it is a history line, so append to output as is
             unparse_researcher_to_imarina_row(researcher_imarina, empty_row)
             output_data = pd.concat([output_data, empty_row], ignore_index=True)
@@ -420,34 +464,23 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
     # Phase 2: Add researchers in A3 that are not present in iMarina
     for index, row in a3_data.iterrows():
         researcher_a3 = parse_a3_row_data(row, translator)
-        researchers_matched_im = search_data(researcher_a3, im_data, parse_imarina_row_data, translator)
-        empty_row = empty_row_output_data.copy()
+        researchers_matched_im = search_data(researcher_a3, im_data, parse_imarina_row_data, translator) #find researcher_a3 have exist in iMarina
+        empty_row = empty_row_output_data.copy()  #prepare a empty row just in case i need dates
 
-        print(f"{researcher_a3.name}: code_center={researcher_a3.code_center}, ini_date={researcher_a3.ini_date}, end_date={researcher_a3.end_date}")
+        print(
+            f"{researcher_a3.name}: code_center={researcher_a3.code_center}, ini_date={researcher_a3.ini_date}, end_date={researcher_a3.end_date}")
         print(f"Visitante: {is_visitor(researcher_a3)}")
 
         if is_visitor(researcher_a3):
             continue
-        if len(researchers_matched_im) == 0:
+
+        if len(researchers_matched_im) == 0:     #the researcher_a3  is new and is not in iMarina
             logger.info(f"Present in A3 but not on iMarina, is a new researcher to add to iMarina")
             unparse_researcher_to_imarina_row(researcher_a3, empty_row)
             output_data = pd.concat([output_data, empty_row], ignore_index=True)
-        elif len(researchers_matched_im) == 1:
-            logger.info(f"Present in A3 and also on iMarina")
-            # Check difference between translation of job from A3 (researcher_a3) and the current job in
-            # iMarina
-            if has_changed_jobs(researcher_a3, researchers_matched_im, translator):
-             # Create new row in iMarina for new position
-               pass
-
-
-
-
-            # Implicitly if has not changed jobs do nothing
-        elif len(researchers_matched_im) > 1:
-            # TODO: implement logic to handle job changes when more than one match
-            logger.info(f"Present in A3 and also on iMarina, we do not need to do anything because we added it on the "
-                        f"previous step. More than one match. Number: {str(len(researchers_matched_im))}")
+        else:
+            logger.info(f"Present in A3 and also on iMarina - already processed in Phase 1")
+            # No hacer nada, ya fue procesado en Phase 1
 
 
     # Si grupo  unidad = DIRECCIO, o grupo unidad = GESTIO, o grupo unidad = OUTREACH llavors eliminar del output ( no poner)
@@ -457,6 +490,15 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
     # to determine from fields to determine, then the current row from A3 corresponds to ICREA researcher or predoc
     # with CSC, so its data from A3 needs to be added to the output.
     output_data.to_excel(output_path, index=False)
+
+# new function TODO
+#def upload_file_sharepoint(file_path: Path):
+    """
+    Uploads a file to Sharepoint Institutional Strengthening
+    """
+
+
+    #pass
 
 
 def main():
@@ -479,6 +521,7 @@ def main():
 
     # Phase 3: Upload file to iMarina and make backup
     shutil.move(output_path, os.path.join(root_dir, "uploads", excel_name))
+    #upload_file_sharepoint(os.path.join(root_dir, "uploads", excel_name)) #de momento silenciada hasta que termine lo cambio de posicion
 
 
 if __name__ == "__main__":

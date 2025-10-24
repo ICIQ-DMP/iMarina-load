@@ -1,6 +1,5 @@
 venv/
 uploads/
-tests/
 logs/
 secrets/
 output/
