@@ -349,7 +349,7 @@ def upload_excel(excel_path):
     logger.info('Closed connection.')
 
 
-
+# in process
 def has_changed_jobs( researcher_a3, researcher_imarina, translator):
     # translate the job_description from A3 (researcher_a3.job_description)
     a3_job =  translator[A3_Field.JOB_DESCRIPTION].get(researcher_a3.job_description, researcher_a3.job_description)
