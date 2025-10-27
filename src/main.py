@@ -349,33 +349,83 @@ def upload_excel(excel_path):
     logger.info('Closed connection.')
 
 
-# in process
-def has_changed_jobs( researcher_a3, researcher_imarina, translator):
-    # translate the job_description from A3 (researcher_a3.job_description)
-    a3_job =  translator[A3_Field.JOB_DESCRIPTION].get(researcher_a3.job_description, researcher_a3.job_description)
 
+def has_changed_jobs(researcher_a3, researcher_imarina, translator):
+    from datetime import date, datetime  # importem això per les dates
 
-    # if job_description  is changed
+    # translate a3 job_description
+    a3_job = translator[A3_Field.JOB_DESCRIPTION].get(
+        researcher_a3.job_description, researcher_a3.job_description
+    )
+
+    # if job_description has changed
     if a3_job != researcher_imarina.job_description:
-        print(f"[CAMBIO] El puesto cambió de : '{a3_job}' a '{researcher_imarina.job_description}'")
+        print(f"[CAMBIO] El puesto cambió de: '{a3_job}' a '{researcher_imarina.job_description}'")
         return True
 
-    # if ini_date or end_date have changed & dates are diferents
-    if (researcher_a3.ini_date or researcher_a3.end_date) and (
-            researcher_a3.ini_date != researcher_imarina.ini_date or
-            researcher_a3.end_date != researcher_imarina.end_date
-    ):
+    # Normalitzar fechas si posa a la data fi de contracte 2099 o None => None (contracte indefinit) fecha indefinida
+    def norm(d):
+        if d is None:
+            return None
+        if isinstance(d, datetime):
+            d = d.date()
+        if isinstance(d, date):
+            return None if d.year >= 2099 else d
+        try:
+            dt = datetime.fromisoformat(str(d))
+            return None if dt.year >= 2099 else dt.date()
+        except Exception:
+            return None
+
+    # fechas importantes del A3 (ini_date, end_date, ini_prorrog, end_prorrog, date_termination)   getattr access at attribute of researcher_a3
+    a3_ini          = norm(getattr(researcher_a3, "ini_date", None))
+    a3_fin_contrato = norm(getattr(researcher_a3, "end_date", None))
+    a3_ini_prorrog  = norm(getattr(researcher_a3, "ini_prorrog", None))
+    a3_fin_prorrog  = norm(getattr(researcher_a3, "end_prorrog", None))
+    a3_baja         = norm(getattr(researcher_a3, "date_termination", None))
+
+    # si hay una fecha de prorroga (end_prorrog) esa es la fecha final. sino es la de fin del contrato normal (end_Date)
+    fin_pre = a3_fin_prorrog or a3_fin_contrato
+    motivo = None
+    if a3_fin_prorrog and (a3_fin_contrato is None or a3_fin_prorrog != a3_fin_contrato):
+        motivo = "PRÓRROGA"
+    elif fin_pre:
+        motivo = "CONTRATO"
+
+    # Baja recorta o establece fin
+    if a3_baja:
+        if fin_pre:
+            a3_fin = min(fin_pre, a3_baja)
+            if a3_baja <= fin_pre:
+                motivo = "BAJA"
+        else:
+            a3_fin = a3_baja
+            motivo = "BAJA"
+    else:
+        a3_fin = fin_pre  # puede quedar None (indefinido) no hay baja
+
+    #  Extrae las fechas de inicio y fin del mismo researcher en iMarina (normalmente no tiene prórrogas ni baja).
+    im_ini = norm(getattr(researcher_imarina, "ini_date", None))
+    im_fin = norm(getattr(researcher_imarina, "end_date", None))
+
+    #  Comparación de fechas (mismo puesto) (si hay fin de prorroga, si hay baja o cambio de fechas)
+    if (a3_ini != im_ini) or (a3_fin != im_fin):
+        if motivo == "BAJA":
+            tag = "[BAJA]"
+        elif motivo == "PRÓRROGA":
+            tag = "[PRÓRROGA]"
+        else:
+            tag = "[FECHAS]"
         print(
-            f"[CAMBIO] Fechas diferentes:\n"
-            f"  A3: inicio={researcher_a3.ini_date}, fin={researcher_a3.end_date}\n"
-            f"  iMarina: inicio={researcher_imarina.ini_date}, fin={researcher_imarina.end_date}"
+            f"{tag} Mismo puesto, fechas distintas:\n"
+            f"  A3: inicio={a3_ini}, fin={a3_fin} "
+            f"(ini_prorrog={a3_ini_prorrog}, end_prorrog={a3_fin_prorrog}, baja={a3_baja})\n"
+            f"  iMarina: inicio={im_ini}, fin={im_fin}"
         )
         return True
-    else:
 
-
-    # si es igual tanto puesto(job_description) como fechas(ini_date & end_date) y no ha cambiado muestra por consola esto:
-        print("[SIN CAMBIO] El puesto y las fechas son iguales y no han cambiado.")
+    #  Sin cambios
+    print("[SIN CAMBIO] El puesto y las fechas son iguales y no han cambiado.")
     return False
 
 
@@ -449,7 +499,7 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
                     # If it has not changed, add current iMarina row to output as is.
                     # (end date not present) it is a contract that could be still ongoing continue
                     new_row = empty_row_output_data.copy()
-                    unparse_researcher_to_imarina_row(researcher_a3, new_row)
+                    unparse_researcher_to_imarina_row(researcher_imarina, new_row)
                     output_data = pd.concat([output_data, new_row], ignore_index=True)
                     print(f"[INFO] {researcher_a3.name}: sin cambio, se mantiene igual")
                 continue
@@ -521,6 +571,7 @@ def main():
 
     # Phase 3: Upload file to iMarina and make backup
     shutil.move(output_path, os.path.join(root_dir, "uploads", excel_name))
+    #TODO
     #upload_file_sharepoint(os.path.join(root_dir, "uploads", excel_name)) #de momento silenciada hasta que termine lo cambio de posicion
 
 

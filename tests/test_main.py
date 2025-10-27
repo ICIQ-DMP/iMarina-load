@@ -1,18 +1,12 @@
-
 from datetime import date, datetime
 
-from src.main import Researcher, is_visitor
 
-
-
+from src.main import Researcher, is_visitor, has_changed_jobs
 
 
 # test de prueba suma
 def test_demo():
     assert 1 + 1 == 2
-
-
-
 
 
 def test_is_visitor():
@@ -40,6 +34,7 @@ def test_is_not_visitor_no_start_date():
     )
     assert is_visitor(researcher) is False
 
+
 def test_is_not_visitor_no_end_date():
     researcher = Researcher(
         code_center=4,
@@ -48,3 +43,5 @@ def test_is_not_visitor_no_end_date():
 
     )
     assert is_visitor(researcher) is True
+
+
