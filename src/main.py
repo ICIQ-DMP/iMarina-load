@@ -542,13 +542,13 @@ def build_upload_excel(input_dir, output_path, countries_path, jobs_path, imarin
     output_data.to_excel(output_path, index=False)
 
 # new function TODO
-#def upload_file_sharepoint(file_path: Path):
+def upload_file_sharepoint(file_path: Path):
     """
     Uploads a file to Sharepoint Institutional Strengthening
     """
 
 
-    #pass
+
 
 
 def main():
@@ -571,8 +571,9 @@ def main():
 
     # Phase 3: Upload file to iMarina and make backup
     shutil.move(output_path, os.path.join(root_dir, "uploads", excel_name))
+
     #TODO
-    #upload_file_sharepoint(os.path.join(root_dir, "uploads", excel_name)) #de momento silenciada hasta que termine lo cambio de posicion
+    upload_file_sharepoint(os.path.join(root_dir, "uploads", excel_name)) #de momento silenciada hasta que termine lo cambio de posicion
 
 
 if __name__ == "__main__":
